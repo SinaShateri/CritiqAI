@@ -6,6 +6,10 @@
         "name": "next"
       }
     ],
+    "paths": {
+      "@/*": ["./"],
+      "@/lib/*": ["./lib/*"]
+    },
     "strictNullChecks": true
   },
   "include": [

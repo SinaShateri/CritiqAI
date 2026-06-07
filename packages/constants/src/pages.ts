@@ -3,7 +3,10 @@ const PAGES = {
   features: '/features',
   pricing: '/pricing',
   docs: '/docs',
-  signup: '/signup',
+  auth: {
+    register: '/auth/register',
+    login: '/auth/login',
+  },
 };
 
 export default PAGES;
