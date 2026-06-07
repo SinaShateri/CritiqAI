@@ -7,6 +7,9 @@ const PAGES = {
     register: '/auth/register',
     login: '/auth/login',
   },
+  dashboard: {
+    index: '/dashboard',
+  },
 };
 
 export default PAGES;

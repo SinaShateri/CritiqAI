@@ -1,7 +1,7 @@
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@repo/db';
 import bcrypt from 'bcryptjs';
-import type { DefaultSession } from 'next-auth';
+import type { AuthOptions, DefaultSession } from 'next-auth';
 import NextAuth from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import GitHub from 'next-auth/providers/github';
@@ -23,7 +23,7 @@ declare module 'next-auth/jwt' {
   }
 }
 
-export const { handlers, auth, signIn, signOut } = NextAuth({
+export const nextAuthOptions: AuthOptions = {
   adapter: PrismaAdapter(prisma),
 
   session: {
@@ -39,11 +39,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID!,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
 
     GitHub({
       clientId: process.env.GITHUB_CLIENT_ID!,
       clientSecret: process.env.GITHUB_CLIENT_SECRET!,
+      allowDangerousEmailAccountLinking: true,
     }),
 
     Credentials({
@@ -114,7 +116,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       return true;
     },
   },
-
   events: {
     // بعد از OAuth، emailVerified رو set کن
     async linkAccount({ user }) {
@@ -124,4 +125,6 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       });
     },
   },
-});
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(nextAuthOptions);

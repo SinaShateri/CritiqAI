@@ -1,3 +1,4 @@
+import PAGES from '@repo/constants/pages';
 import { redirect } from 'next/navigation';
 import { auth } from '../../lib/auth/config';
 
@@ -39,6 +40,6 @@ export async function requireGuest() {
   const session = await getSession();
 
   if (session?.user) {
-    redirect('/dashboard');
+    redirect(PAGES.dashboard.index);
   }
 }

@@ -1,4 +1,5 @@
 import { verifyEmailAction } from '@/lib/actions/auth.actions';
+import PAGES from '@repo/constants/pages';
 import { type NextRequest, NextResponse } from 'next/server';
 
 /**
@@ -10,7 +11,7 @@ export async function GET(req: NextRequest) {
 
   if (!token) {
     return NextResponse.redirect(
-      new URL('/login?error=invalid_token', req.url),
+      new URL(`${PAGES.auth.login}?error=invalid_token`, req.url),
     );
   }
 
@@ -18,10 +19,15 @@ export async function GET(req: NextRequest) {
 
   if (!result.success) {
     return NextResponse.redirect(
-      new URL(`/login?error=${encodeURIComponent(result.error)}`, req.url),
+      new URL(
+        `${PAGES.auth.login}?error=${encodeURIComponent(result.error)}`,
+        req.url,
+      ),
     );
   }
 
   // موفق — به login با پیام success
-  return NextResponse.redirect(new URL('/login?verified=true', req.url));
+  return NextResponse.redirect(
+    new URL(`${PAGES.auth.login}?verified=true`, req.url),
+  );
 }

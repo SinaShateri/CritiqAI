@@ -3,7 +3,8 @@
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
 import { z } from 'zod';
-import { signIn, signOut } from '../../lib/auth/config';
+// import { signIn, signOut } from '../../lib/auth/config';
+import { signIn, signOut } from 'next-auth/react';
 import {
   sendPasswordResetEmail,
   sendVerificationEmail,
@@ -176,7 +177,7 @@ export async function loginWithGithubAction() {
  * خروج از حساب
  */
 export async function logoutAction() {
-  await signOut({ redirectTo: '/login' });
+  await signOut({ redirect: true, callbackUrl: '/' });
 }
 
 /**

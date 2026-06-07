@@ -1,4 +1,8 @@
+'use client';
+
+import PAGES from '@repo/constants/pages';
 import { IconBrandGithub, IconBrandGoogle } from '@tabler/icons-react';
+import { signIn } from 'next-auth/react';
 
 const AuthSocials = () => {
   return (
@@ -11,6 +15,9 @@ const AuthSocials = () => {
       <div className='flex gap-2.5'>
         <button
           type='button'
+          onClick={() => {
+            signIn('google', { callbackUrl: PAGES.dashboard.index });
+          }}
           className='bg-surface border-border-subtle text-body flex flex-1 items-center justify-center gap-2 rounded-sm border py-2.5 text-[12px] transition-colors hover:border-[#2e3148]'
         >
           <IconBrandGoogle size={18} />
@@ -18,6 +25,9 @@ const AuthSocials = () => {
         </button>
         <button
           type='button'
+          onClick={() => {
+            signIn('github', { callbackUrl: PAGES.dashboard.index });
+          }}
           className='bg-surface border-border-subtle text-body flex flex-1 items-center justify-center gap-2 rounded-sm border py-2.5 text-[12px] transition-colors hover:border-[#2e3148]'
         >
           <IconBrandGithub size={18} />
