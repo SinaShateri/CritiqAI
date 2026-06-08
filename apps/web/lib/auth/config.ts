@@ -58,7 +58,7 @@ export const nextAuthOptions: AuthOptions = {
         // ۱. Validate input با zod
         const parsed = z
           .object({
-            email: z.string().email(),
+            email: z.email(),
             password: z.string().min(8),
           })
           .safeParse(credentials);

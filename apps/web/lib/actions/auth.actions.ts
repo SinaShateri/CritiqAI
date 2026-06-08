@@ -2,9 +2,9 @@
 
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import { z } from 'zod';
-// import { signIn, signOut } from '../../lib/auth/config';
 import { signIn, signOut } from 'next-auth/react';
+import { cookies } from 'next/headers';
+import { z } from 'zod';
 import {
   sendPasswordResetEmail,
   sendVerificationEmail,
@@ -30,7 +30,7 @@ export type ActionResult<T = void> =
 const registerSchema = z
   .object({
     name: z.string().min(2, 'نام باید حداقل ۲ کاراکتر باشد'),
-    email: z.string().email('آدرس ایمیل معتبر نیست'),
+    email: z.email('آدرس ایمیل معتبر نیست'),
     password: z
       .string()
       .min(8, 'رمز عبور باید حداقل ۸ کاراکتر باشد')
@@ -50,12 +50,12 @@ const registerSchema = z
   });
 
 const loginSchema = z.object({
-  email: z.string().email('آدرس ایمیل معتبر نیست'),
+  email: z.email('آدرس ایمیل معتبر نیست'),
   password: z.string().min(1, 'رمز عبور الزامی است'),
 });
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email('آدرس ایمیل معتبر نیست'),
+  email: z.email('آدرس ایمیل معتبر نیست'),
 });
 
 const resetPasswordSchema = z.object({
@@ -76,7 +76,6 @@ export async function registerAction(
   _prevState: ActionResult | null,
   formData: FormData,
 ): Promise<ActionResult> {
-  // ۱. Validate
   const parsed = registerSchema.safeParse({
     name: formData.get('name'),
     email: formData.get('email'),
@@ -91,24 +90,24 @@ export async function registerAction(
     };
   }
 
-  const { name, email, password, confirm } = parsed.data;
+  const { name, email, password } = parsed.data;
 
-  // ۲. چک کن user وجود نداره
   const existing = await getUserByEmail(email);
   if (existing) {
     return { success: false, error: 'این ایمیل قبلاً ثبت شده است' };
   }
 
-  // ۳. Hash password
   const hashedPassword = await bcrypt.hash(password, 12);
 
-  // ۴. ساخت user
   await createUser({ email, name, hashedPassword });
 
-  // ۵. ساخت و ارسال verification token
   const token = crypto.randomBytes(32).toString('hex');
   await upsertVerificationToken(email, token);
   await sendVerificationEmail(email, token);
+
+  (await cookies()).set('registerEmail', email, {
+    maxAge: 60 * 2,
+  });
 
   return {
     success: true,
@@ -119,7 +118,10 @@ export async function registerAction(
 /**
  * ورود با email/password
  */
-export async function loginAction(formData: FormData): Promise<ActionResult> {
+export async function loginAction(
+  _prevState: ActionResult | null,
+  formData: FormData,
+): Promise<ActionResult> {
   // ۱. Validate
   const parsed = loginSchema.safeParse({
     email: formData.get('email'),
@@ -135,28 +137,26 @@ export async function loginAction(formData: FormData): Promise<ActionResult> {
 
   const { email, password } = parsed.data;
 
-  // ۲. signIn از NextAuth
-  try {
-    await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
-
-    return { success: true };
-  } catch (error) {
-    if (error instanceof Error) {
-      // خطای custom که از authorize() throw شده
-      if (error.message.includes('EMAIL_NOT_VERIFIED')) {
-        return {
-          success: false,
-          error: 'ایمیل شما تایید نشده است. لطفاً ایمیل خود را بررسی کنید.',
-        };
-      }
-      return { success: false, error: 'ایمیل یا رمز عبور اشتباه است' };
-    }
-    throw error;
+  // چک کردن user و password در سرور
+  const user = await getUserByEmail(email);
+  if (!user || !user.password) {
+    return { success: false, error: 'ایمیل یا رمز عبور اشتباه است' };
   }
+
+  if (!user.emailVerified) {
+    return {
+      success: false,
+      error: 'EMAIL_NOT_VERIFIED',
+    };
+  }
+
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) {
+    return { success: false, error: 'ایمیل یا رمز عبور اشتباه است' };
+  }
+
+  // اگه همه چیز درست بود، به client بگو signIn بزنه
+  return { success: true };
 }
 
 /**

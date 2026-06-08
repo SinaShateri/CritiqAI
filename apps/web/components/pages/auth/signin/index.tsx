@@ -1,8 +1,20 @@
+'use client';
+
+import { loginAction } from '@/lib/actions/auth.actions';
 import PAGES from '@repo/constants/pages';
-import { IconEye, IconLock, IconMail } from '@tabler/icons-react';
+import { IconEye, IconEyeOff, IconLock, IconMail } from '@tabler/icons-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useActionState, useState } from 'react';
 
 const AuthSignin = () => {
+  const router = useRouter();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const [state, action, isPending] = useActionState(loginAction, null);
+
+  console.log(state);
+
   return (
     <div
       id='auth-forms'
@@ -11,7 +23,10 @@ const AuthSignin = () => {
         animation: '0.2s ease-out 0s 1 normal both running fade-up',
       }}
     >
-      <form className='flex flex-col gap-3.5'>
+      <form
+        className='flex flex-col gap-3.5'
+        action={action}
+      >
         <div>
           <label className='text-muted-text mb-1.25 block text-[11px]'>
             Email address
@@ -40,15 +55,20 @@ const AuthSignin = () => {
               <input
                 placeholder='••••••••'
                 className='bg-surface border-border-subtle text-heading-soft placeholder:text-faint focus:border-brand w-full rounded-sm border py-2.5 pr-9 pl-9 text-[13px] transition-colors focus:outline-none'
-                type='password'
+                type={showPassword ? 'text' : 'password'}
                 name='password'
               />
               <span className='text-faint absolute top-1/2 right-2.5 -translate-y-1/2'>
                 <button
                   type='button'
+                  onClick={() => setShowPassword((p) => !p)}
                   className='text-faint hover:text-body'
                 >
-                  <IconEye size={18} />
+                  {showPassword ? (
+                    <IconEyeOff size={18} />
+                  ) : (
+                    <IconEye size={18} />
+                  )}
                 </button>
               </span>
             </div>

@@ -6,6 +6,7 @@ const PAGES = {
   auth: {
     register: '/auth/register',
     login: '/auth/login',
+    verifyEmailSent: '/auth/verify-email-sent',
   },
   dashboard: {
     index: '/dashboard',

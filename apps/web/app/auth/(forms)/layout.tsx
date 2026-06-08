@@ -1,6 +1,6 @@
-import AuthFormHeading from '../../components/pages/auth/form/heading';
-import AuthSidebar from '../../components/pages/auth/sidebar';
-import AuthSocials from '../../components/pages/auth/socials';
+import AuthFormHeading from '../../../components/pages/auth/form/heading';
+import AuthSidebar from '../../../components/pages/auth/sidebar';
+import AuthSocials from '../../../components/pages/auth/socials';
 
 const Layout = async ({ children }: LayoutProps<'/auth'>) => {
   return (

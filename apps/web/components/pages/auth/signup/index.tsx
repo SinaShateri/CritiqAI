@@ -23,7 +23,7 @@ const AuthSignup = () => {
   // بعد از ثبت‌نام موفق، redirect به صفحه تایید ایمیل
   useEffect(() => {
     if (state?.success) {
-      router.push('/verify-email-sent');
+      router.push(PAGES.auth.verifyEmailSent);
     }
   }, [state, router]);
 
