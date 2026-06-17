@@ -1,0 +1,6 @@
+const NUMBER = {
+  BASE_VERIFY_TOKEN_DELAY_MINUTES: 1,
+  MAX_VERIFY_TOKEN_DELAY_MINUTES: 60,
+} as const;
+
+export default NUMBER;

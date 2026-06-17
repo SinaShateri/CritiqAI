@@ -1,19 +1,17 @@
+import Button from '@repo/ui/Button';
+
 const HomeCTA = () => {
   return (
-    <section className='py-18 px-6 text-center'>
-      <h2 className='text-[32px] font-medium text-heading'>
+    <section className='px-6 py-18 text-center'>
+      <h2 className='text-heading text-[32px] font-medium'>
         Ready to fix your website?
       </h2>
-      <p className='mt-2 text-[15px] text-muted-text'>
+      <p className='text-muted-text mt-2 text-[15px]'>
         Start with a free analysis. No credit card needed.
       </p>
-      <div className='mt-7 flex items-center justify-center gap-3 flex-wrap'>
-        <button className='bg-brand hover:bg-brand-hover transition-colors text-white text-[14px] font-medium px-7 py-2.5 rounded-md'>
-          Get started free
-        </button>
-        <button className='bg-transparent border border-brand text-brand hover:bg-brand/10 transition-colors text-[14px] font-medium px-7 py-2.5 rounded-md'>
-          View sample report
-        </button>
+      <div className='mt-7 flex flex-wrap items-center justify-center gap-3'>
+        <Button>Get started free</Button>
+        <Button variant='outlined-primary'>View sample report</Button>
       </div>
     </section>
   );

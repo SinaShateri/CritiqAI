@@ -2,18 +2,29 @@
 
 import { loginAction } from '@/lib/actions/auth.actions';
 import PAGES from '@repo/constants/pages';
-import { IconEye, IconEyeOff, IconLock, IconMail } from '@tabler/icons-react';
+import Button from '@repo/ui/button';
+import {
+  IconArrowRight,
+  IconEye,
+  IconEyeOff,
+  IconLock,
+  IconMail,
+} from '@tabler/icons-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useActionState, useState } from 'react';
+import { useActionState, useEffect, useState } from 'react';
 
-const AuthSignin = () => {
+const AuthLogin = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
 
   const [state, action, isPending] = useActionState(loginAction, null);
 
-  console.log(state);
+  useEffect(() => {
+    if (state?.success) {
+      router.push(PAGES.dashboard.index);
+    }
+  }, [state, router]);
 
   return (
     <div
@@ -23,6 +34,11 @@ const AuthSignin = () => {
         animation: '0.2s ease-out 0s 1 normal both running fade-up',
       }}
     >
+      {state && !state.success && (
+        <div className='mb-4 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-[13px] text-red-400'>
+          {state.error}
+        </div>
+      )}
       <form
         className='flex flex-col gap-3.5'
         action={action}
@@ -74,20 +90,21 @@ const AuthSignin = () => {
             </div>
           </div>
           <div className='mt-1.5 text-right'>
-            <a
-              href='/forgot-password'
+            <Link
+              href={PAGES.auth.forgotPassword}
               className='text-brand text-[11px] no-underline'
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
         </div>
-        <button
+        <Button
           type='submit'
-          className='bg-brand hover:bg-brand-hover mt-2 w-full rounded-md py-3 text-[14px] font-medium text-white transition-colors active:scale-[0.98]'
+          endIcon={<IconArrowRight size={18} />}
+          disabled={isPending}
         >
-          Sign in →
-        </button>
+          Sign in
+        </Button>
       </form>
 
       <p className='text-faint mt-4 text-center text-[12px]'>
@@ -103,4 +120,4 @@ const AuthSignin = () => {
   );
 };
 
-export default AuthSignin;
+export default AuthLogin;

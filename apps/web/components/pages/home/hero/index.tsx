@@ -1,4 +1,5 @@
-import { IconWorld } from '@tabler/icons-react';
+import Button from '@repo/ui/button';
+import { IconArrowRight, IconWorld } from '@tabler/icons-react';
 
 const HomeHero = () => {
   return (
@@ -32,19 +33,20 @@ const HomeHero = () => {
           style={{ animationDelay: '0.2s' }}
         >
           <div className='border-border-subtle flex items-center border-r px-3.5'>
-            <IconWorld className='lucide lucide-globe text-faint' />
+            <IconWorld className='text-faint' />
           </div>
           <input
             type='url'
             placeholder='https://yourwebsite.com'
             className='placeholder:text-muted-text flex-1 border-none bg-transparent px-3.5 py-3 text-[14px] text-[#8c8fa0] outline-none'
           />
-          <button
+          <Button
             type='submit'
-            className='bg-brand hover:bg-brand-hover rounded-r-md px-5 text-[13px] font-medium text-white transition-colors'
+            className='rounded-s-none px-5 transition-colors'
+            endIcon={<IconArrowRight size={18} />}
           >
-            Analyze →
-          </button>
+            Analyze
+          </Button>
         </form>
         <p className='text-faint mt-4 text-[12px]'>
           No signup required · Results in ~30 seconds

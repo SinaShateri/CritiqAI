@@ -1,7 +1,7 @@
-import AuthSignin from '../../../../components/pages/auth/signin';
+import AuthLogin from '../../../../components/pages/auth/login';
 
 const Page = () => {
-  return <AuthSignin />;
+  return <AuthLogin />;
 };
 
 export default Page;

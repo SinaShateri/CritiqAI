@@ -1,7 +1,9 @@
 import PAGES from '@repo/constants/pages';
 import { IconArrowLeft, IconCheck, IconMail } from '@tabler/icons-react';
 import { cookies } from 'next/headers';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import AuthVerifyEmailSentResendForm from '../../../components/pages/auth/verify-email-sent/resend-form';
 
 const Page = async () => {
   const registeredEmail = (await cookies()).get('registerEmail')?.value;
@@ -13,6 +15,7 @@ const Page = async () => {
   return (
     <div className='bg-bg flex min-h-screen w-full flex-col items-center justify-center px-6 py-10'>
       <div className='flex w-full max-w-95 flex-col items-center'>
+        {/* ICON */}
         <div
           className='relative'
           style={{ animation: 'verify-pop 0.4s ease-out both' }}
@@ -23,6 +26,7 @@ const Page = async () => {
               className='text-brand'
             />
           </div>
+
           <div className='border-bg bg-success absolute -right-0.5 -bottom-0.5 flex h-5 w-5 items-center justify-center rounded-full border-2'>
             <IconCheck
               size={24}
@@ -30,6 +34,8 @@ const Page = async () => {
             />
           </div>
         </div>
+
+        {/* TITLE */}
         <div
           className='mt-6 flex flex-col items-center gap-2 text-center'
           style={{ animation: 'fade-up 0.4s ease-out 0.1s both' }}
@@ -37,9 +43,11 @@ const Page = async () => {
           <h1 className='text-heading text-[22px] leading-tight font-medium'>
             Check your inbox
           </h1>
+
           <p className='text-body text-[14px] leading-[1.7]'>
             We sent a verification link to
           </p>
+
           <div className='border-border-subtle bg-surface mt-1 inline-flex items-center gap-1.5 rounded-md border px-3.5 py-1.5'>
             <IconMail
               size={16}
@@ -50,6 +58,8 @@ const Page = async () => {
             </span>
           </div>
         </div>
+
+        {/* STEPS */}
         <div
           className='border-border-subtle bg-surface mt-7 w-full rounded-lg border px-5 py-4.5'
           style={{ animation: 'fade-up 0.4s ease-out 0.2s both' }}
@@ -57,47 +67,38 @@ const Page = async () => {
           <div className='text-muted-text mb-3.5 text-[10px] tracking-[1.5px]'>
             NEXT STEPS
           </div>
-          <div className='mb-3 flex items-center gap-3'>
-            <div className='text-brand flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border border-[#2e3148] bg-[#1a1c2e] text-[11px]'>
-              1
+
+          {[
+            'Open your email inbox',
+            'Click the "Verify email" button in the message',
+            "You'll be redirected to sign in automatically",
+          ].map((text, i) => (
+            <div
+              key={i}
+              className='mb-3 flex items-center gap-3 last:mb-0'
+            >
+              <div className='text-brand flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border border-[#2e3148] bg-[#1a1c2e] text-[11px]'>
+                {i + 1}
+              </div>
+              <span className='text-body text-[13px]'>{text}</span>
             </div>
-            <span className='text-body text-[13px]'>Open your email inbox</span>
-          </div>
-          <div className='mb-3 flex items-center gap-3'>
-            <div className='text-brand flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border border-[#2e3148] bg-[#1a1c2e] text-[11px]'>
-              2
-            </div>
-            <span className='text-body text-[13px]'>
-              Click the &ldquo;Verify email&quot; button in the message
-            </span>
-          </div>
-          <div className='flex items-center gap-3'>
-            <div className='text-brand flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border border-[#2e3148] bg-[#1a1c2e] text-[11px]'>
-              3
-            </div>
-            <span className='text-body text-[13px]'>
-              You&apos;ll be redirected to sign in automatically
-            </span>
-          </div>
+          ))}
         </div>
-        <div className='bg-border-subtle my-6 h-px w-full'></div>
+
+        <div className='bg-border-subtle my-6 h-px w-full' />
+
+        {/* ACTIONS */}
         <div className='flex flex-col items-center gap-2'>
-          <div className='flex items-center gap-1.5'>
-            <span className='text-faint text-[13px]'>
-              Didn&apos;t receive it?
-            </span>
-            <button className='text-brand bg-transparent text-[13px] hover:underline disabled:opacity-60'>
-              Resend email
-            </button>
-          </div>
-          <a
-            href='/auth'
+          <AuthVerifyEmailSentResendForm />
+          <Link
+            href={PAGES.auth.login}
             className='text-faint hover:text-body flex items-center gap-1.5 text-[12px] transition-colors'
           >
             <IconArrowLeft size={13} />
             Back to sign in
-          </a>
+          </Link>
         </div>
+
         <p className='mt-4 text-center text-[11px] text-[#2e3148]'>
           Can&apos;t find it? Check your spam or junk folder.
         </p>

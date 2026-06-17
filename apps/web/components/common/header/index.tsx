@@ -1,5 +1,6 @@
 import LAYOUT from '@repo/constants/layout';
 import PAGES from '@repo/constants/pages';
+import Button from '@repo/ui/button';
 import Link from 'next/link';
 import { navLinks } from './utils';
 
@@ -29,12 +30,14 @@ const Header = () => {
             </Link>
           ))}
 
-          <Link
+          <Button
+            component={Link}
+            variant='outlined-primary'
             href={PAGES.auth.register}
             className='text-brand border-brand hover:bg-brand/10 rounded-md border px-4 py-1.5 text-[13px] transition-colors'
           >
             Sign up
-          </Link>
+          </Button>
         </div>
       </nav>
     </header>

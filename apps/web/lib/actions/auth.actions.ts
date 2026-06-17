@@ -2,7 +2,7 @@
 
 import bcrypt from 'bcryptjs';
 import crypto from 'crypto';
-import { signIn, signOut } from 'next-auth/react';
+import { signOut } from 'next-auth/react';
 import { cookies } from 'next/headers';
 import { z } from 'zod';
 import {
@@ -92,27 +92,35 @@ export async function registerAction(
 
   const { name, email, password } = parsed.data;
 
-  const existing = await getUserByEmail(email);
-  if (existing) {
-    return { success: false, error: 'این ایمیل قبلاً ثبت شده است' };
+  try {
+    const existing = await getUserByEmail(email);
+    if (existing) {
+      return { success: false, error: 'این ایمیل قبلاً ثبت شده است' };
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 12);
+
+    await createUser({ email, name, hashedPassword });
+
+    const token = crypto.randomBytes(32).toString('hex');
+    await upsertVerificationToken(email, token);
+    await sendVerificationEmail(email, token);
+
+    (await cookies()).set('registerEmail', email, {
+      maxAge: 60 * 60 * 24,
+    });
+
+    return {
+      success: true,
+      message: 'Check your email for a verification link',
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
+
+    return { success: false, error: 'Something went wrong, please try again' };
   }
-
-  const hashedPassword = await bcrypt.hash(password, 12);
-
-  await createUser({ email, name, hashedPassword });
-
-  const token = crypto.randomBytes(32).toString('hex');
-  await upsertVerificationToken(email, token);
-  await sendVerificationEmail(email, token);
-
-  (await cookies()).set('registerEmail', email, {
-    maxAge: 60 * 2,
-  });
-
-  return {
-    success: true,
-    message: 'ثبت‌نام موفق! لطفاً ایمیل خود را تایید کنید.',
-  };
 }
 
 /**
@@ -160,20 +168,6 @@ export async function loginAction(
 }
 
 /**
- * ورود با Google OAuth
- */
-export async function loginWithGoogleAction() {
-  await signIn('google', { redirectTo: '/dashboard' });
-}
-
-/**
- * ورود با GitHub OAuth
- */
-export async function loginWithGithubAction() {
-  await signIn('github', { redirectTo: '/dashboard' });
-}
-
-/**
  * خروج از حساب
  */
 export async function logoutAction() {
@@ -211,24 +205,52 @@ export async function verifyEmailAction(token: string): Promise<ActionResult> {
  * ارسال مجدد ایمیل تایید
  */
 export async function resendVerificationEmailAction(
-  email: string,
+  _prevState: ActionResult | null,
+  formData: FormData,
 ): Promise<ActionResult> {
+  const email = formData.get('email') as string;
+
   const user = await getUserByEmail(email);
 
+  // anti-enumeration
   if (!user) {
-    // عمداً همان پیام موفق رو نمایش میدیم (security)
-    return { success: true, message: 'اگر ایمیل موجود باشد، لینک ارسال شد' };
+    return {
+      success: true,
+      message: 'If you have an account, check your email',
+    };
   }
 
   if (user.emailVerified) {
-    return { success: false, error: 'این ایمیل قبلاً تایید شده است' };
+    return {
+      success: false,
+      error: 'The email is already verified',
+    };
   }
 
-  const token = crypto.randomBytes(32).toString('hex');
-  await upsertVerificationToken(email, token);
-  await sendVerificationEmail(email, token);
+  try {
+    const token = crypto.randomBytes(32).toString('hex');
 
-  return { success: true, message: 'ایمیل تایید مجدداً ارسال شد' };
+    await upsertVerificationToken(email, token);
+
+    await sendVerificationEmail(email, token);
+
+    return {
+      success: true,
+      message: 'A new verification link has been sent',
+    };
+  } catch (error) {
+    if (error instanceof Error) {
+      return {
+        success: false,
+        error: error.message,
+      };
+    }
+
+    return {
+      success: false,
+      error: 'Something went wrong',
+    };
+  }
 }
 
 /**

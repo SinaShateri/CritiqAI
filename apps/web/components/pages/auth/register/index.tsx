@@ -13,12 +13,14 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useActionState, useEffect, useState } from 'react';
 
-const AuthSignup = () => {
+const AuthRegister = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
 
   const [state, action, isPending] = useActionState(registerAction, null);
+
+  console.log(state);
 
   // بعد از ثبت‌نام موفق، redirect به صفحه تایید ایمیل
   useEffect(() => {
@@ -169,4 +171,4 @@ const AuthSignup = () => {
   );
 };
 
-export default AuthSignup;
+export default AuthRegister;
