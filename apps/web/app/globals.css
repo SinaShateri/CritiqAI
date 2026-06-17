@@ -100,17 +100,3 @@ button {
 .animate-blink {
   animation: blink 1s step-end infinite;
 }
-
-@keyframes shimmer {
-  0% {
-    background-position: -400px 0;
-  }
-  100% {
-    background-position: 400px 0;
-  }
-}
-.shimmer {
-  background: linear-gradient(90deg, #111318 0%, #1a1c24 50%, #111318 100%);
-  background-size: 800px 100%;
-  animation: shimmer 1.4s linear infinite;
-}

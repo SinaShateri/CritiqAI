@@ -22,7 +22,7 @@ const Button = <T extends ElementType = 'button'>({
   const baseStyles =
     variant !== 'default'
       ? cn(
-          'px-3.5 py-2.5 text-xs sm:text-sm flex items-center justify-center font-medium rounded-xl h-12 transition-all cursor-pointer disabled:cursor-not-allowed',
+          'px-3.5 py-2.5 text-xs sm:text-sm flex items-center justify-center font-medium rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed',
           (startIcon || endIcon) && 'flex items-center justify-center gap-1',
           fullWidth && 'w-full',
           (disabled || loading) && 'cursor-not-allowed!',
