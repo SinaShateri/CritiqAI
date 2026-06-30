@@ -1,14 +1,20 @@
-import PAGES from '@repo/constants/pages';
+import LAYOUT from '@repo/constants/layout';
 import Link from 'next/link';
+import HeaderProfile from './profile';
 import { navLinks } from './utils';
 
-const Header = () => {
+const Header = async () => {
   return (
-    <header className='sticky top-0 z-50 h-13 bg-bg border-b border-border-subtle'>
-      <nav className='h-full max-w-6xl mx-auto px-6 flex items-center justify-between'>
+    <header
+      className='bg-bg border-border-subtle sticky top-0 z-50 border-b'
+      style={{
+        height: LAYOUT.header.height,
+      }}
+    >
+      <nav className='mx-auto flex h-full max-w-6xl items-center justify-between px-6'>
         <Link
           href='/'
-          className='text-[15px] font-medium text-heading'
+          className='text-heading text-[15px] font-medium'
         >
           CritiqAI
         </Link>
@@ -17,18 +23,13 @@ const Header = () => {
             <Link
               key={title}
               href={href}
-              className='text-[13px] text-body hover:text-heading transition-colors'
+              className='text-body hover:text-heading text-[13px] transition-colors'
             >
               {title}
             </Link>
           ))}
-
-          <Link
-            href={PAGES.signup}
-            className='text-[13px] text-brand border border-brand rounded-md px-4 py-1.5 hover:bg-brand/10 transition-colors'
-          >
-            Sign up
-          </Link>
+          
+          <HeaderProfile />
         </div>
       </nav>
     </header>

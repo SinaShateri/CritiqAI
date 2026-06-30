@@ -3,6 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 import Footer from '../components/common/footer';
 import Header from '../components/common/header';
+import ClientProvider from '../components/providers/client';
 import { inter } from './fonts';
 
 export const metadata: Metadata = {
@@ -18,9 +19,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={`${inter.variable} font-sans`}>
-        <Header />
-        {children}
-        <Footer />
+        <ClientProvider>
+          <Header />
+          {children}
+          <Footer />
+        </ClientProvider>
       </body>
     </html>
   );

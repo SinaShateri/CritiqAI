@@ -3,7 +3,15 @@ const PAGES = {
   features: '/features',
   pricing: '/pricing',
   docs: '/docs',
-  signup: '/signup',
+  auth: {
+    register: '/auth/register',
+    login: '/auth/login',
+    verifyEmailSent: '/auth/verify-email-sent',
+    forgotPassword: '/auth/forgot-password',
+  },
+  dashboard: {
+    index: '/dashboard',
+  },
 };
 
 export default PAGES;
