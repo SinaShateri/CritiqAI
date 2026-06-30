@@ -17,7 +17,7 @@ const HeaderProfile = () => {
         href={PAGES.auth.register}
         className='text-brand border-brand hover:bg-brand/10 rounded-md border px-4 py-1.5 text-[13px] transition-colors'
       >
-        Sign up
+        Get started
       </Button>
     );
 
