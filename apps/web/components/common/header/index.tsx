@@ -1,9 +1,15 @@
 import LAYOUT from '@repo/constants/layout';
+import PAGES from '@repo/constants/pages';
+import { headers } from 'next/headers';
 import Link from 'next/link';
 import HeaderProfile from './profile';
 import { navLinks } from './utils';
 
 const Header = async () => {
+  const pathname = (await headers()).get('x-pathname');
+
+  if (pathname?.startsWith(PAGES.dashboard.index)) return null;
+
   return (
     <header
       className='bg-bg border-border-subtle sticky top-0 z-50 border-b'
@@ -28,7 +34,7 @@ const Header = async () => {
               {title}
             </Link>
           ))}
-          
+
           <HeaderProfile />
         </div>
       </nav>
