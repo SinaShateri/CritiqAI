@@ -11,6 +11,9 @@ const PAGES = {
   },
   dashboard: {
     index: '/dashboard',
+    analyses: '/dashboard/analyses',
+    shared: '/dashboard/shared',
+    settings: '/dashboard/settings',
   },
 };
 

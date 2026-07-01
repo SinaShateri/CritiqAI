@@ -25,7 +25,9 @@ export default function RootLayout({
             <Header />
           </Suspense>
           {children}
-          <Footer />
+          <Suspense>
+            <Footer />
+          </Suspense>
         </ClientProvider>
       </body>
     </html>
