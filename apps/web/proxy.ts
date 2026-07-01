@@ -2,6 +2,8 @@
 // import { withAuth } from 'next-auth/middleware';
 // import { NextResponse } from 'next/server';
 
+import { NextRequest, NextResponse } from 'next/server';
+
 // const protectedRoutes = ['/dashboard', '/analysis'];
 // const authRoutes = ['/login', '/register'];
 
@@ -33,4 +35,14 @@
 //   return NextResponse.next();
 // });
 
-export default function middleware() {}
+export default function middleware(request: NextRequest) {
+  const requestHeaders = new Headers(request.headers);
+
+  requestHeaders.set('x-pathname', request.nextUrl.pathname);
+
+  return NextResponse.next({
+    request: {
+      headers: requestHeaders,
+    },
+  });
+}

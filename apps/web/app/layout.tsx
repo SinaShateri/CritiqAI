@@ -1,6 +1,7 @@
 import './globals.css';
 
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import Footer from '../components/common/footer';
 import Header from '../components/common/header';
 import ClientProvider from '../components/providers/client';
@@ -20,9 +21,13 @@ export default function RootLayout({
     <html lang='en'>
       <body className={`${inter.variable} font-sans`}>
         <ClientProvider>
-          <Header />
+          <Suspense>
+            <Header />
+          </Suspense>
           {children}
-          <Footer />
+          <Suspense>
+            <Footer />
+          </Suspense>
         </ClientProvider>
       </body>
     </html>
