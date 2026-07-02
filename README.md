@@ -4,15 +4,15 @@ A modern, full-stack web application built with a monorepo architecture. CritiqA
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Tech Stack](#tech-stack)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Quick Start](#quick-start)
-- [Development Guide](#development-guide)
-- [Building for Production](#building-for-production)
-- [Available Scripts](#available-scripts)
-- [Troubleshooting](#troubleshooting)
+- [Overview](#-overview)
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [Prerequisites](#-prerequisites)
+- [Quick Start](#-quick-start)
+- [Development Guide](#-development-guide)
+- [Building for Production](#-building-for-production)
+- [Available Scripts](#-available-scripts)
+- [Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview
 

@@ -20,6 +20,7 @@ type BaseProps = {
   fullWidth?: boolean;
   loading?: boolean;
   disabled?: boolean;
+  padding?: 'sm' | 'md' | 'lg';
   classNames?: {
     children?: string;
     icon?: string;
