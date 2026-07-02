@@ -5,7 +5,7 @@ import cn from '@repo/utils/cn';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { dashboardNavItems } from './utils';
+import { dashboardNavItems } from '../utils';
 
 const LayoutsDashboardSidebar = () => {
   const pathname = usePathname();

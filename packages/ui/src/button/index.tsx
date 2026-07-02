@@ -15,6 +15,7 @@ const Button = <T extends ElementType = 'button'>({
   endIcon = null,
   children,
   fullWidth = false,
+  padding = 'md',
   ...props
 }: ButtonProps<T>) => {
   const Component = (component || 'button') as ElementType;
@@ -22,24 +23,30 @@ const Button = <T extends ElementType = 'button'>({
   const baseStyles =
     variant !== 'default'
       ? cn(
-          'px-3.5 py-2.5 text-xs sm:text-sm flex items-center justify-center font-medium rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed',
+          'text-xs sm:text-sm flex items-center justify-center font-medium rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed',
           (startIcon || endIcon) && 'flex items-center justify-center gap-1',
           fullWidth && 'w-full',
           (disabled || loading) && 'cursor-not-allowed!',
         )
       : '';
 
+  const paddingStyles = {
+    sm: 'px-2.5 py-1.5',
+    md: 'px-3.5 py-2.5',
+    lg: 'px-4.5 py-3.5',
+  };
+
   const variantStyles = {
     default: '',
     filled:
-      'bg-brand hover:bg-brand-hover rounded-md py-3 text-[14px] text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
+      'bg-brand hover:bg-brand-hover rounded-md py-3 text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
     'outlined-primary':
       'border border-brand text-brand hover:bg-brand/10 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-primary/10 data-[selected="true"]:text-primary data-[selected="true"]:bg-primary/10',
     'outlined-gray':
       'border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-gray-50 data-[selected="true"]:text-primary data-[selected="true"]:bg-primary/10',
     text: 'text-brand hover:bg-brand/10 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-primary/10',
     elevated:
-      'bg-brand hover:bg-brand-hover rounded-md py-3 text-[14px] text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
+      'bg-brand hover:bg-brand-hover rounded-md py-3 text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
     tonal:
       tonalTheme === 'primary'
         ? 'bg-brand text-white hover:bg-brand-hover disabled:bg-neutral-700'
@@ -49,6 +56,7 @@ const Button = <T extends ElementType = 'button'>({
   const classes = cn(
     baseStyles,
     variantStyles[variant as ButtonVariant],
+    paddingStyles[padding],
     className,
   );
 
