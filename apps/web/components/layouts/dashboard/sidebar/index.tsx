@@ -1,5 +1,6 @@
 'use client';
 
+import PAGES from '@repo/constants/pages';
 import Button from '@repo/ui/button';
 import cn from '@repo/utils/cn';
 import { useSession } from 'next-auth/react';
@@ -14,9 +15,12 @@ const LayoutsDashboardSidebar = () => {
   return (
     <aside className='border-border-subtle hidden w-50 shrink-0 flex-col border-r md:flex'>
       <div className='border-border-subtle border-b px-4 py-4'>
-        <span className='text-heading text-[14px] font-medium'>
+        <Link
+          href={PAGES.home}
+          className='text-heading text-[14px] font-medium'
+        >
           Critiq<span className='text-brand'>AI</span>
-        </span>
+        </Link>
       </div>
 
       <nav className='flex-1 px-2 py-2.5'>

@@ -1,14 +1,16 @@
+'use client';
+
 import LAYOUT from '@repo/constants/layout';
 import PAGES from '@repo/constants/pages';
-import { headers } from 'next/headers';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import HeaderProfile from './profile';
 import { navLinks } from './utils';
 
-const Header = async () => {
-  const pathname = (await headers()).get('x-pathname');
+const Header = () => {
+  const pathname = usePathname();
 
-  if (pathname?.startsWith(PAGES.dashboard.index)) return null;
+  if (pathname.startsWith(PAGES.dashboard.index)) return null;
 
   return (
     <header
@@ -19,7 +21,7 @@ const Header = async () => {
     >
       <nav className='mx-auto flex h-full max-w-6xl items-center justify-between px-6'>
         <Link
-          href='/'
+          href={PAGES.home}
           className='text-heading text-[15px] font-medium'
         >
           CritiqAI

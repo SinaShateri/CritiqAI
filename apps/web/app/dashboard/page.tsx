@@ -1,5 +1,7 @@
 import DashboardIndex from '../../components/pages/dashboard/index';
 
-export default function Page() {
+const Page = () => {
   return <DashboardIndex />;
-}
+};
+
+export default Page;
