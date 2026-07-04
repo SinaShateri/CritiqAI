@@ -16,7 +16,7 @@ const AuthSocials = () => {
         <button
           type='button'
           onClick={() => {
-            signIn('google', { callbackUrl: PAGES.dashboard.index });
+            signIn('google', { callbackUrl: PAGES.dashboard.overview });
           }}
           className='bg-surface border-border-subtle text-body flex flex-1 items-center justify-center gap-2 rounded-sm border py-2.5 text-[12px] transition-colors hover:border-[#2e3148]'
         >
@@ -26,7 +26,7 @@ const AuthSocials = () => {
         <button
           type='button'
           onClick={() => {
-            signIn('github', { callbackUrl: PAGES.dashboard.index });
+            signIn('github', { callbackUrl: PAGES.dashboard.overview });
           }}
           className='bg-surface border-border-subtle text-body flex flex-1 items-center justify-center gap-2 rounded-sm border py-2.5 text-[12px] transition-colors hover:border-[#2e3148]'
         >

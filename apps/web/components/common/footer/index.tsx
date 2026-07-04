@@ -6,7 +6,7 @@ import { FooterLink, footerLinks } from './utils';
 const Footer = async () => {
   const pathname = (await headers()).get('x-pathname');
 
-  if (pathname?.startsWith(PAGES.dashboard.index)) return null;
+  if (pathname?.startsWith(PAGES.dashboard.overview)) return null;
 
   return (
     <footer className='border-border-subtle border-t px-6 py-6'>

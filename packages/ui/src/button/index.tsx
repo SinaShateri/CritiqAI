@@ -43,7 +43,7 @@ const Button = <T extends ElementType = 'button'>({
     'outlined-primary':
       'border border-brand text-brand hover:bg-brand/10 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-primary/10 data-[selected="true"]:text-primary data-[selected="true"]:bg-primary/10',
     'outlined-gray':
-      'border border-gray-300 text-gray-500 hover:bg-gray-50 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-gray-50 data-[selected="true"]:text-primary data-[selected="true"]:bg-primary/10',
+      'border border-gray-500 text-gray-500 hover:bg-gray-50 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-gray-50 data-[selected="true"]:text-primary data-[selected="true"]:bg-primary/10',
     text: 'text-brand hover:bg-brand/10 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-primary/10',
     elevated:
       'bg-brand hover:bg-brand-hover rounded-md py-3 text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
