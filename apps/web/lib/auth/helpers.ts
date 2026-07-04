@@ -40,6 +40,6 @@ export async function requireGuest() {
   const session = await getSession();
 
   if (session?.user) {
-    redirect(PAGES.dashboard.index);
+    redirect(PAGES.dashboard.overview);
   }
 }

@@ -8,8 +8,8 @@ import {
 
 export const dashboardNavItems = [
   {
-    label: 'Dashboard',
-    href: PAGES.dashboard.index,
+    label: 'Overview',
+    href: PAGES.dashboard.overview,
     icon: IconLayoutDashboard,
   },
   {

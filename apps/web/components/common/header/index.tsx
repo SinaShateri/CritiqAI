@@ -10,7 +10,7 @@ import { navLinks } from './utils';
 const Header = () => {
   const pathname = usePathname();
 
-  if (pathname.startsWith(PAGES.dashboard.index)) return null;
+  if (pathname.startsWith(PAGES.dashboard.root)) return null;
 
   return (
     <header

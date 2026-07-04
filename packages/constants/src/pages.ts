@@ -10,7 +10,8 @@ const PAGES = {
     forgotPassword: '/auth/forgot-password',
   },
   dashboard: {
-    index: '/dashboard',
+    root: '/dashboard',
+    overview: '/dashboard/overview',
     analyses: '/dashboard/analyses',
     shared: '/dashboard/shared',
     settings: '/dashboard/settings',

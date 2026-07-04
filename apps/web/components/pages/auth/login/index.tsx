@@ -3,11 +3,11 @@
 import PAGES from '@repo/constants/pages';
 import Button from '@repo/ui/button';
 import {
-  IconArrowRight,
-  IconEye,
-  IconEyeOff,
-  IconLock,
-  IconMail,
+    IconArrowRight,
+    IconEye,
+    IconEyeOff,
+    IconLock,
+    IconMail,
 } from '@tabler/icons-react';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
@@ -44,7 +44,7 @@ const AuthLogin = () => {
       return;
     }
 
-    router.push(PAGES.dashboard.index);
+    router.push(PAGES.dashboard.overview);
   };
 
   return (
