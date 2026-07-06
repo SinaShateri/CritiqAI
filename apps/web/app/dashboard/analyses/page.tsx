@@ -1,4 +1,4 @@
-import DashboardAnalyses from '../../../components/pages/dashboard/analyses';
+import DashboardAnalyses from '../../../components/pages/dashboard/analyses/index';
 
 const Page = () => {
   return <DashboardAnalyses />;
