@@ -1,4 +1,4 @@
-import { AnalysisData } from '../../../../../../app/dashboard/analyses/[id]/page';
+import { AnalysisData } from '../types';
 import DashboardAnalysesIDScoresCard from './card';
 
 const DashboardAnalysesIDScores = ({

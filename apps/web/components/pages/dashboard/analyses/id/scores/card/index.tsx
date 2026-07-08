@@ -1,4 +1,4 @@
-import { AnalysisData } from '../../../../../../../app/dashboard/analyses/[id]/page';
+import { AnalysisData } from '../../types';
 
 const scoreRingStyle = (score: number) => {
   if (score >= 90) {
@@ -25,7 +25,7 @@ const scoreRingStyle = (score: number) => {
 const DashboardAnalysesIDScoresCard = ({
   score,
 }: {
-  score: AnalysisData['scores'][0];
+  score: AnalysisData['scores'][number];
 }) => (
   <div className='border-border-subtle bg-surface flex items-center gap-3 rounded-lg border px-3.5 py-3'>
     <div
