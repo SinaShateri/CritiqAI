@@ -34,14 +34,7 @@ export function createAnalysisWorker(
       } catch (e) {}
     }
     await processor(job.data as AnalysisJobData);
-    if ((job.data as any).analysisId) {
-      try {
-        await prisma.analysis.update({
-          where: { id: (job.data as any).analysisId },
-          data: { status: 'ANALYZING' },
-        });
-      } catch (e) {}
-    }
+    // processor is responsible for analysis/complete status transitions.
   });
 }
 

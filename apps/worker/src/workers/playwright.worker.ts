@@ -5,77 +5,97 @@ import { prisma } from '@repo/db';
 import type { AnalysisJobData } from '@repo/queue';
 import fs from 'fs/promises';
 import path from 'path';
-import { chromium } from 'playwright';
+import { Browser, chromium, Page } from 'playwright';
 
-export default async function playProcessor(data: AnalysisJobData) {
+export type PlaywrightScrapeResult = {
+  screenshotUrl: string;
+  html: string;
+  stylesheets: string[];
+  scripts: string[];
+  perf: Record<string, unknown>;
+};
+
+export default async function runPlaywrightScrape(
+  data: AnalysisJobData,
+): Promise<PlaywrightScrapeResult> {
   const { url, analysisId } = data;
-  const browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({
-    viewport: { width: 1440, height: 900 },
-  });
-  const page = await context.newPage();
+  const browser: Browser = await chromium.launch({ headless: true });
+  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const page: Page = await context.newPage();
+
+  const screenshotsDir = path.join(process.cwd(), 'screenshots');
+  await fs.mkdir(screenshotsDir, { recursive: true });
+  const filename = `${analysisId || Date.now()}.png`;
+  const screenshotPath = path.join(screenshotsDir, filename);
 
   try {
     const timeout = parseInt(process.env.PLAYWRIGHT_TIMEOUT || '30000', 10);
     await page.goto(url, { waitUntil: 'networkidle', timeout });
-    // small wait to let JS settle
     await page.waitForTimeout(500);
 
     const html = await page.content();
 
-    const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
-    const screenshotsDir = path.join(process.cwd(), 'screenshots');
-    await fs.mkdir(screenshotsDir, { recursive: true });
-    const filename = `${analysisId || Date.now()}.png`;
-    const filePath = path.join(screenshotsDir, filename);
-    await fs.writeFile(filePath, screenshot);
+    const { stylesheets, scripts } = await page.evaluate(() => {
+      const doc = globalThis as any;
+      const linkNodes = Array.from(doc.document.querySelectorAll('link[rel="stylesheet"]')) as any[];
+      const links = linkNodes.map((link) => link.href).filter(Boolean);
+      const inlineStyles = Array.from(doc.document.querySelectorAll('style') as any[]).map(
+        (style) => style.textContent || '',
+      );
+      const scriptEntries = Array.from(doc.document.scripts || [] as any[])
+        .map((script: any) => ({
+          src: script.src,
+          content: script.textContent,
+        }))
+        .map((item) => item.src || item.content || '')
+        .filter(Boolean);
+      return { stylesheets: links.concat(inlineStyles), scripts: scriptEntries };
+    });
 
-    // basic performance entries (navigation + paint)
+    const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
+    await fs.writeFile(screenshotPath, screenshot);
+
     const perf = await page.evaluate(() => {
       const navigation = performance.getEntriesByType('navigation' as any);
       const paint = performance.getEntriesByType('paint' as any);
       return { navigation, paint };
     });
 
-    // save scraped result to DB
+    const result: PlaywrightScrapeResult = {
+      screenshotUrl: screenshotPath,
+      html,
+      stylesheets,
+      scripts,
+      perf,
+    };
+
     if (analysisId) {
       await prisma.analysis.update({
         where: { id: analysisId },
         data: {
-          screenshotUrl: filePath,
-          lighthouseReport: { scrapedHtml: html },
+          screenshotUrl: screenshotPath,
+          lighthouseReport: {
+            scrapedHtml: html,
+            assets: { stylesheets, scripts },
+            perf,
+          },
           accessibilityIssues: null,
           seoIssues: null,
           aiSuggestions: null,
-          // optionally store perf timings
-          // store under a11y or lighthouseReport as supplemental
-          // here we append perf under lighthouseReport
-          // (Prisma Json column accepts arbitrary objects)
-          // mark status to ANALYZING (next workers will pick it up)
           status: 'ANALYZING',
-          // store navigation/paint in a JSON field
-          // we'll merge into lighthouseReport
         },
-      });
-
-      // append perf data in a second update to avoid strict typing issues
-      await prisma.analysis.update({
-        where: { id: analysisId },
-        data: { lighthouseReport: { scrapedHtml: html, perf } },
       });
     }
 
     await browser.close();
+    return result;
   } catch (err) {
-    try {
-      if (analysisId) {
-        await prisma.analysis.update({
-          where: { id: analysisId },
-          data: { status: 'FAILED' },
-        });
+    if (analysisId) {
+      try {
+        await prisma.analysis.update({ where: { id: analysisId }, data: { status: 'FAILED' } });
+      } catch {
+        // ignore DB error
       }
-    } catch (e) {
-      // ignore DB error
     }
     await browser.close();
     throw err;
