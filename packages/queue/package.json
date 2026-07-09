@@ -1,0 +1,26 @@
+{
+  "name": "@repo/queue",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -b",
+    "dev": "ts-node-esm src/index.ts"
+  },
+  "dependencies": {
+    "bullmq": "5.79.3",
+    "ioredis": "5.11.1",
+    "dotenv": "17.4.2",
+    "@repo/db": "workspace:*",
+    "@repo/typescript-config": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "ts-node": "10.9.2",
+    "typescript": "6.0.3"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

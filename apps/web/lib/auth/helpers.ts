@@ -1,6 +1,18 @@
 import PAGES from '@repo/constants/pages';
+import { prisma } from '@repo/db';
 import { redirect } from 'next/navigation';
 import { auth } from '../../lib/auth/config';
+
+export async function getUserById(id: string) {
+  return prisma.user.findUnique({ where: { id } });
+}
+
+export async function requireUser(id?: string) {
+  if (!id) throw new Error('Not authenticated');
+  const user = await getUserById(id);
+  if (!user) throw new Error('User not found');
+  return user;
+}
 
 /**
  * Session رو برمیگردونه، اگه نبود null

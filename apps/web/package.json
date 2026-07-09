@@ -16,6 +16,7 @@
     "@repo/db": "workspace:*",
     "@repo/ui": "workspace:*",
     "@repo/utils": "workspace:*",
+    "@repo/queue": "workspace:*",
     "@tabler/icons-react": "3.44.0",
     "babel-plugin-react-compiler": "1.0.0",
     "bcryptjs": "3.0.3",
