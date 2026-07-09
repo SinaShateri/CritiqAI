@@ -1,0 +1,55 @@
+type AISuggestion = { title: string; content: string };
+import OpenAIMod from 'openai';
+
+export async function analyzeWithOpenAI(input: {
+  html?: string;
+  screenshotUrl?: string;
+  lighthouse?: Record<string, unknown> | undefined;
+}): Promise<AISuggestion[]> {
+  // Lightweight stub: if OPENAI_API_KEY is present, try dynamic import; otherwise return quick heuristics
+  if (process.env.OPENAI_API_KEY) {
+    try {
+      // const OpenAIMod = (await import('openai')) as unknown as {
+      //   OpenAI: new (opts?: { apiKey?: string }) => {
+      //     responses?: {
+      //       create: (opts: { input: string }) => Promise<unknown>;
+      //     };
+      //   };
+      // };
+      const client = new OpenAIMod.OpenAI({
+        apiKey: process.env.OPENAI_API_KEY,
+      });
+      const prompt = `Provide up to 3 high level suggestions for improving this page. Provide title and short content.`;
+      const resp = client.responses?.create
+        ? await client.responses.create({ input: prompt })
+        : null;
+      const text = JSON.stringify(resp);
+      return [{ title: 'AI (remote)', content: String(text).slice(0, 2000) }];
+    } catch (err) {
+      console.warn('OpenAI analyze failed', err);
+    }
+  }
+
+  const suggestions: AISuggestion[] = [];
+  const categories = input.lighthouse?.['categories'] as
+    | Record<string, unknown>
+    | undefined;
+  if (categories?.performance) {
+    suggestions.push({
+      title: 'Performance',
+      content: 'Consider optimizing images and inlining critical CSS.',
+    });
+  }
+  if (categories?.accessibility) {
+    suggestions.push({
+      title: 'Accessibility',
+      content: 'Run axe-core and address critical violations.',
+    });
+  }
+  if (suggestions.length === 0)
+    suggestions.push({
+      title: 'Quick win',
+      content: 'Run the full analysis to get tailored AI suggestions.',
+    });
+  return suggestions;
+}

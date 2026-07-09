@@ -1,0 +1,26 @@
+import { prisma } from '@repo/db';
+import { analyzeWithOpenAI } from './openai';
+
+export async function runAIForAnalysis(analysisId: string) {
+  const a = await prisma.analysis.findUnique({ where: { id: analysisId } });
+  if (!a) throw new Error('analysis not found');
+
+    // lighthouseReport is stored as Json; safely access scrapedHtml
+    const scrapedHtml = a.lighthouseReport && typeof a.lighthouseReport === 'object' ? (a.lighthouseReport as unknown as Record<string, unknown>)['scrapedHtml'] : undefined;
+    const screenshotUrl = a.screenshotUrl ?? undefined;
+
+    const suggestions = await analyzeWithOpenAI({ html: scrapedHtml as string | undefined, screenshotUrl, lighthouse: a.lighthouseReport as Record<string, unknown> | undefined });
+
+  await prisma.analysis.update({
+    where: { id: analysisId },
+    data: { aiSuggestions: suggestions, status: 'AI_PROCESSING' },
+  });
+
+  // mark completed after saving suggestions
+  await prisma.analysis.update({
+    where: { id: analysisId },
+    data: { status: 'COMPLETED', completedAt: new Date() },
+  });
+
+  return suggestions;
+}

@@ -1,3 +1,7 @@
+// Minimal auth config surface compatible with NextAuth or custom usage.
+export const authConfig = {
+  sessionName: 'next-auth.session-token',
+};
 import { PrismaAdapter } from '@auth/prisma-adapter';
 import { prisma } from '@repo/db';
 import bcrypt from 'bcryptjs';

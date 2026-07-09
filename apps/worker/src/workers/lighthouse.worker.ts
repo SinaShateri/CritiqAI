@@ -63,13 +63,14 @@ export default async function runLighthouseAudit({
     }
 
     const report = result.lhr;
+
     const performanceScore = Math.round(
-      (report.categories.performance.score ?? 0) * 100,
+      (report.categories.performance?.score ?? 0) * 100,
     );
     const accessibilityScore = Math.round(
-      (report.categories.accessibility.score ?? 0) * 100,
+      (report.categories.accessibility?.score ?? 0) * 100,
     );
-    const seoScore = Math.round((report.categories.seo.score ?? 0) * 100);
+    const seoScore = Math.round((report.categories.seo?.score ?? 0) * 100);
     const uxScore = Math.round(
       (report.categories['best-practices']?.score ?? 0) * 100,
     );
@@ -116,6 +117,19 @@ export default async function runLighthouseAudit({
       accessibilityIssues,
       seoIssues,
     };
+  } catch (e) {
+    // attach failure info to the Analysis record when possible
+    if (analysisId) {
+      try {
+        await prisma.analysis.update({
+          where: { id: analysisId },
+          data: { status: 'FAILED' },
+        });
+      } catch (e) {
+        // swallow DB errors here
+      }
+    }
+    throw e;
   } finally {
     chrome.kill();
   }

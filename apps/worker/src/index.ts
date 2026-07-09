@@ -3,8 +3,11 @@ dotenv.config();
 
 import { prisma } from '@repo/db';
 import { AnalysisJobData, createAnalysisWorker } from '@repo/queue';
+import runAIAnalyzer from './workers/ai-analyzer.worker.js';
+import runAxeAudit from './workers/axe.worker.js';
 import runLighthouseAudit from './workers/lighthouse.worker.js';
 import runPlaywrightScrape from './workers/playwright.worker.js';
+import runSeoParser from './workers/seo.worker.js';
 
 async function processor(data: AnalysisJobData) {
   const { url, analysisId } = data;
@@ -16,6 +19,15 @@ async function processor(data: AnalysisJobData) {
 
   // After scraping, run Lighthouse audit
   const audit = await runLighthouseAudit({ analysisId, url });
+
+  // run axe-core accessibility audit
+  const axeRes = await runAxeAudit({ url, analysisId });
+
+  // run SEO parser (uses scraped HTML stored in lighthouseReport)
+  const seoRes = await runSeoParser({ analysisId, url });
+
+  // run AI analyzer to generate suggestions
+  const aiRes = await runAIAnalyzer({ analysisId, url });
 
   const auditReport =
     typeof audit.lighthouseReport === 'object' && audit.lighthouseReport !== null
@@ -35,8 +47,9 @@ async function processor(data: AnalysisJobData) {
         assets: { stylesheets: scrapeResult.stylesheets, scripts: scrapeResult.scripts },
         perf: scrapeResult.perf,
       },
-      accessibilityIssues: audit.accessibilityIssues,
-      seoIssues: audit.seoIssues,
+      accessibilityIssues: axeRes.violations || audit.accessibilityIssues,
+      seoIssues: seoRes.issues || audit.seoIssues,
+      aiSuggestions: aiRes.suggestions || null,
       status: 'COMPLETED',
     },
   });
