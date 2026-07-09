@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { prisma } from '@repo/db';
+import { prisma, Prisma } from '@repo/db';
 import type { AnalysisJobData } from '@repo/queue';
 import fs from 'fs/promises';
 import path from 'path';
@@ -20,7 +20,9 @@ export default async function runPlaywrightScrape(
 ): Promise<PlaywrightScrapeResult> {
   const { url, analysisId } = data;
   const browser: Browser = await chromium.launch({ headless: true });
-  const context = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+  const context = await browser.newContext({
+    viewport: { width: 1440, height: 900 },
+  });
   const page: Page = await context.newPage();
 
   const screenshotsDir = path.join(process.cwd(), 'screenshots');
@@ -37,19 +39,24 @@ export default async function runPlaywrightScrape(
 
     const { stylesheets, scripts } = await page.evaluate(() => {
       const doc = globalThis as any;
-      const linkNodes = Array.from(doc.document.querySelectorAll('link[rel="stylesheet"]')) as any[];
+      const linkNodes = Array.from(
+        doc.document.querySelectorAll('link[rel="stylesheet"]'),
+      ) as any[];
       const links = linkNodes.map((link) => link.href).filter(Boolean);
-      const inlineStyles = Array.from(doc.document.querySelectorAll('style') as any[]).map(
-        (style) => style.textContent || '',
-      );
-      const scriptEntries = Array.from(doc.document.scripts || [] as any[])
+      const inlineStyles = Array.from(
+        doc.document.querySelectorAll('style') as any[],
+      ).map((style) => style.textContent || '');
+      const scriptEntries = Array.from(doc.document.scripts || ([] as any[]))
         .map((script: any) => ({
           src: script.src,
           content: script.textContent,
         }))
         .map((item) => item.src || item.content || '')
         .filter(Boolean);
-      return { stylesheets: links.concat(inlineStyles), scripts: scriptEntries };
+      return {
+        stylesheets: links.concat(inlineStyles),
+        scripts: scriptEntries,
+      };
     });
 
     const screenshot = await page.screenshot({ fullPage: true, type: 'png' });
@@ -77,11 +84,11 @@ export default async function runPlaywrightScrape(
           lighthouseReport: {
             scrapedHtml: html,
             assets: { stylesheets, scripts },
-            perf,
+            perf: perf as Prisma.InputJsonValue,
           },
-          accessibilityIssues: null,
-          seoIssues: null,
-          aiSuggestions: null,
+          accessibilityIssues: Prisma.DbNull,
+          seoIssues: Prisma.DbNull,
+          aiSuggestions: Prisma.DbNull,
           status: 'ANALYZING',
         },
       });
@@ -92,7 +99,10 @@ export default async function runPlaywrightScrape(
   } catch (err) {
     if (analysisId) {
       try {
-        await prisma.analysis.update({ where: { id: analysisId }, data: { status: 'FAILED' } });
+        await prisma.analysis.update({
+          where: { id: analysisId },
+          data: { status: 'FAILED' },
+        });
       } catch {
         // ignore DB error
       }

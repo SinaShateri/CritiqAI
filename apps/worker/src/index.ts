@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { prisma } from '@repo/db';
+import { prisma, type Prisma } from '@repo/db';
 import { AnalysisJobData, createAnalysisWorker } from '@repo/queue';
 import runAIAnalyzer from './workers/ai-analyzer.worker.js';
 import runAxeAudit from './workers/axe.worker.js';
@@ -30,7 +30,8 @@ async function processor(data: AnalysisJobData) {
   const aiRes = await runAIAnalyzer({ analysisId, url });
 
   const auditReport =
-    typeof audit.lighthouseReport === 'object' && audit.lighthouseReport !== null
+    typeof audit.lighthouseReport === 'object' &&
+    audit.lighthouseReport !== null
       ? audit.lighthouseReport
       : {};
 
@@ -42,10 +43,13 @@ async function processor(data: AnalysisJobData) {
       a11yScore: audit.a11yScore,
       uxScore: audit.uxScore,
       lighthouseReport: {
-        ...(auditReport as Record<string, unknown>),
+        ...(auditReport as Record<string, Prisma.InputJsonValue>),
         scrapedHtml: scrapeResult.html,
-        assets: { stylesheets: scrapeResult.stylesheets, scripts: scrapeResult.scripts },
-        perf: scrapeResult.perf,
+        assets: {
+          stylesheets: scrapeResult.stylesheets,
+          scripts: scrapeResult.scripts,
+        },
+        perf: scrapeResult.perf as Prisma.InputJsonValue,
       },
       accessibilityIssues: axeRes.violations || audit.accessibilityIssues,
       seoIssues: seoRes.issues || audit.seoIssues,

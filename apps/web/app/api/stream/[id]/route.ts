@@ -1,7 +1,10 @@
 import { prisma } from '@repo/db';
 
-export async function GET(req: Request, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(
+  req: Request,
+  { params }: { params: Promise<{ id: string }> },
+) {
+  const { id } = await params;
 
   if (!id) {
     return new Response('Missing id', { status: 400 });
@@ -42,11 +45,15 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
           // first time: send full initial state
           if (!lastSnapshot) {
             send('progress', { stage: snapshot.status });
-            if (snapshot.screenshotUrl) send('screenshot', { url: snapshot.screenshotUrl });
-            if (snapshot.lighthouseReport) send('lighthouse', { report: snapshot.lighthouseReport });
-            if (snapshot.accessibilityIssues) send('accessibility', { issues: snapshot.accessibilityIssues });
+            if (snapshot.screenshotUrl)
+              send('screenshot', { url: snapshot.screenshotUrl });
+            if (snapshot.lighthouseReport)
+              send('lighthouse', { report: snapshot.lighthouseReport });
+            if (snapshot.accessibilityIssues)
+              send('accessibility', { issues: snapshot.accessibilityIssues });
             if (snapshot.seoIssues) send('seo', { issues: snapshot.seoIssues });
-            if (snapshot.aiSuggestions) send('ai_feedback', { suggestions: snapshot.aiSuggestions });
+            if (snapshot.aiSuggestions)
+              send('ai_feedback', { suggestions: snapshot.aiSuggestions });
             lastSnapshot = snapshot;
             return;
           }
@@ -56,28 +63,46 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
             send('progress', { stage: snapshot.status });
           }
 
-          if (JSON.stringify(snapshot.lighthouseReport) !== JSON.stringify(lastSnapshot.lighthouseReport)) {
+          if (
+            JSON.stringify(snapshot.lighthouseReport) !==
+            JSON.stringify(lastSnapshot.lighthouseReport)
+          ) {
             send('lighthouse', { report: snapshot.lighthouseReport });
           }
 
-          if (JSON.stringify(snapshot.accessibilityIssues) !== JSON.stringify(lastSnapshot.accessibilityIssues)) {
+          if (
+            JSON.stringify(snapshot.accessibilityIssues) !==
+            JSON.stringify(lastSnapshot.accessibilityIssues)
+          ) {
             send('accessibility', { issues: snapshot.accessibilityIssues });
           }
 
-          if (JSON.stringify(snapshot.seoIssues) !== JSON.stringify(lastSnapshot.seoIssues)) {
+          if (
+            JSON.stringify(snapshot.seoIssues) !==
+            JSON.stringify(lastSnapshot.seoIssues)
+          ) {
             send('seo', { issues: snapshot.seoIssues });
           }
 
-          if (JSON.stringify(snapshot.aiSuggestions) !== JSON.stringify(lastSnapshot.aiSuggestions)) {
+          if (
+            JSON.stringify(snapshot.aiSuggestions) !==
+            JSON.stringify(lastSnapshot.aiSuggestions)
+          ) {
             send('ai_feedback', { suggestions: snapshot.aiSuggestions });
           }
 
-          if (snapshot.screenshotUrl && snapshot.screenshotUrl !== lastSnapshot.screenshotUrl) {
+          if (
+            snapshot.screenshotUrl &&
+            snapshot.screenshotUrl !== lastSnapshot.screenshotUrl
+          ) {
             send('screenshot', { url: snapshot.screenshotUrl });
           }
 
           // complete
-          if (snapshot.status === 'COMPLETED' && lastSnapshot.status !== 'COMPLETED') {
+          if (
+            snapshot.status === 'COMPLETED' &&
+            lastSnapshot.status !== 'COMPLETED'
+          ) {
             send('complete', { id });
             // keep the connection open for a short time then close
             setTimeout(() => {
@@ -107,7 +132,6 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
         closed = true;
       };
 
-      // @ts-ignore - Request has signal in runtime
       req.signal?.addEventListener?.('abort', abortHandler);
     },
   });
@@ -120,5 +144,3 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
     },
   });
 }
-
-export const dynamic = 'force-dynamic';

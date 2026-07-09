@@ -44,6 +44,9 @@
     "EMAIL_PORT",
     "EMAIL_USER",
     "EMAIL_PASS",
-    "EMAIL_FROM"
+    "EMAIL_FROM",
+    "OPENAI_API_KEY",
+    "PLAYWRIGHT_TIMEOUT",
+    "REDIS_URL"
   ]
 }

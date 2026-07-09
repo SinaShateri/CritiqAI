@@ -1,0 +1,1 @@
+{"root":["./src/index.ts","./src/workers/ai-analyzer.worker.ts","./src/workers/axe.worker.ts","./src/workers/lighthouse.worker.ts","./src/workers/playwright.worker.ts","./src/workers/seo.worker.ts"],"version":"6.0.3"}

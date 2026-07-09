@@ -22,7 +22,11 @@ export async function GET(req: NextRequest) {
     );
   }
 
-  return NextResponse.redirect(
+  const response = NextResponse.redirect(
     new URL(`${PAGES.auth.login}?verified=true`, req.url),
-  ).cookies.delete('registerEmail');
+  );
+
+  response.cookies.delete('registerEmail');
+
+  return response;
 }
