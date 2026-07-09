@@ -1,8 +1,5 @@
 import { severityStyles } from '..';
-import {
-  AnalysisData,
-  Severity,
-} from '../../../../../../../app/dashboard/analyses/[id]/page';
+import { AnalysisData, Severity } from '../../types';
 
 const IssueRow = ({ issue }: { issue: AnalysisData['issues'][number] }) => {
   const style = severityStyles[issue.severity as Severity];
@@ -32,4 +29,3 @@ const IssueRow = ({ issue }: { issue: AnalysisData['issues'][number] }) => {
 };
 
 export default IssueRow;
-

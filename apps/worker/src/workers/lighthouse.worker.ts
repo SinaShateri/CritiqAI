@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import { prisma } from '@repo/db';
+import { prisma, Prisma } from '@repo/db';
 import { launch } from 'chrome-launcher';
 import lighthouse from 'lighthouse';
 
@@ -102,7 +102,7 @@ export default async function runLighthouseAudit({
         seoScore: seoScore,
         a11yScore: accessibilityScore,
         uxScore: uxScore,
-        lighthouseReport: reportJson,
+        lighthouseReport: reportJson as unknown as Prisma.InputJsonValue,
         accessibilityIssues,
         seoIssues,
       },
