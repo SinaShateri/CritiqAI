@@ -2,10 +2,10 @@ import './globals.css';
 
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
+import { inter } from '../assets/fonts';
 import Footer from '../components/common/footer';
 import Header from '../components/common/header';
 import ClientProvider from '../components/providers/client';
-import { inter } from './fonts';
 
 export const metadata: Metadata = {
   title: 'CritiqAI',
