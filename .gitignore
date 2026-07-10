@@ -41,3 +41,7 @@ yarn-error.log*
 packages/database/generated
 
 AI_Website_Critic_Requirements.md
+
+# TypeScript build info
+*.tsbuildinfo
+
