@@ -154,9 +154,6 @@ importers:
       '@repo/queue':
         specifier: workspace:*
         version: link:../../packages/queue
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../../packages/typescript-config
       axe-core:
         specifier: 4.12.1
         version: 4.12.1
@@ -179,6 +176,9 @@ importers:
         specifier: 1.61.0
         version: 1.61.0
     devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../../packages/typescript-config
       '@types/node':
         specifier: 26.1.1
         version: 26.1.1
@@ -190,10 +190,16 @@ importers:
         version: 6.0.3
 
   packages/constants:
-    dependencies:
+    devDependencies:
       '@repo/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
+      '@types/node':
+        specifier: ^22.15.3
+        version: 22.15.3
+      typescript:
+        specifier: 6.0.3
+        version: 6.0.3
 
   packages/database:
     dependencies:
@@ -343,19 +349,19 @@ importers:
 
   packages/utils:
     dependencies:
-      '@repo/typescript-config':
-        specifier: workspace:*
-        version: link:../typescript-config
       clsx:
-        specifier: ^2.1.1
+        specifier: 2.1.1
         version: 2.1.1
       tailwind-merge:
-        specifier: ^3.6.0
+        specifier: 3.6.0
         version: 3.6.0
       universal-cookie:
         specifier: 8.0.1
         version: 8.0.1
     devDependencies:
+      '@repo/typescript-config':
+        specifier: workspace:*
+        version: link:../typescript-config
       '@types/node':
         specifier: 25.9.2
         version: 25.9.2
