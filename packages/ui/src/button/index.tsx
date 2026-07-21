@@ -16,19 +16,22 @@ const Button = <T extends ElementType = 'button'>({
   children,
   fullWidth = false,
   padding = 'md',
+  type,
   ...props
 }: ButtonProps<T>) => {
   const Component = (component || 'button') as ElementType;
+  const isButtonElement = Component === 'button';
+  const hasIconOnlyChild = !children && (startIcon || endIcon);
 
-  const baseStyles =
-    variant !== 'default'
-      ? cn(
-          'text-xs sm:text-sm flex items-center justify-center font-medium rounded-xl transition-all cursor-pointer disabled:cursor-not-allowed',
-          (startIcon || endIcon) && 'flex items-center justify-center gap-1',
-          fullWidth && 'w-full',
-          (disabled || loading) && 'cursor-not-allowed!',
-        )
-      : '';
+  if (process.env.NODE_ENV !== 'production' && hasIconOnlyChild && !props['aria-label'] && !props['aria-labelledby']) {
+    console.warn('Button uses icon-only content without an accessible label.');
+  }
+
+  const baseStyles = cn(
+    'inline-flex items-center justify-center gap-2 rounded-lg border text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60',
+    fullWidth && 'w-full',
+    (disabled || loading) && 'cursor-not-allowed',
+  );
 
   const paddingStyles = {
     sm: 'px-2.5 py-1.5',
@@ -37,88 +40,35 @@ const Button = <T extends ElementType = 'button'>({
   };
 
   const variantStyles = {
-    default: '',
-    filled:
-      'bg-brand hover:bg-brand-hover rounded-md py-3 text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
-    'outlined-primary':
-      'border border-brand text-brand hover:bg-brand/10 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-primary/10 data-[selected="true"]:text-primary data-[selected="true"]:bg-primary/10',
-    'outlined-gray':
-      'border border-gray-500 text-gray-500 hover:bg-gray-50 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-gray-50 data-[selected="true"]:text-primary data-[selected="true"]:bg-primary/10',
-    text: 'text-brand hover:bg-brand/10 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-primary/10',
-    elevated:
-      'bg-brand hover:bg-brand-hover rounded-md py-3 text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50',
+    default: 'border-transparent bg-transparent text-foreground',
+    filled: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/90',
+    'outlined-primary': 'border-primary/40 bg-transparent text-primary hover:bg-primary/10',
+    'outlined-gray': 'border-border bg-transparent text-foreground-muted hover:bg-surface',
+    text: 'border-transparent bg-transparent text-primary hover:bg-primary/10',
+    elevated: 'border-primary/20 bg-surface-raised text-foreground hover:bg-surface',
     tonal:
       tonalTheme === 'primary'
-        ? 'bg-brand text-white hover:bg-brand-hover disabled:bg-neutral-700'
-        : 'bg-white text-brand hover:bg-brand/10 disabled:text-neutral-500 disabled:border-neutral-500 hover:bg-primary/10',
+        ? 'border-transparent bg-primary text-primary-foreground hover:bg-primary/90'
+        : 'border-border bg-surface text-foreground hover:bg-surface-raised',
   };
 
-  const classes = cn(
-    baseStyles,
-    variantStyles[variant as ButtonVariant],
-    paddingStyles[padding],
-    className,
-  );
+  const classes = cn(baseStyles, variantStyles[variant as ButtonVariant], paddingStyles[padding], className);
 
   return (
     <Component
       className={classes}
-      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      disabled={isButtonElement ? disabled || loading : undefined}
+      type={isButtonElement ? type ?? 'button' : undefined}
       {...props}
     >
-      <span className={classNames?.icon}>{startIcon}</span>
-
+      {startIcon ? <span className={cn('shrink-0', classNames?.icon)}>{startIcon}</span> : null}
       <span className={cn('flex items-center', classNames?.children)}>
-        {loading ? (
-          <IconLoader4
-            size={24}
-            className='animate-spin'
-          />
-        ) : (
-          children
-        )}
+        {loading ? <IconLoader4 size={18} className='animate-spin' /> : children}
       </span>
-
-      <span className={classNames?.icon}>{endIcon}</span>
+      {endIcon ? <span className={cn('shrink-0', classNames?.icon)}>{endIcon}</span> : null}
     </Component>
   );
-
-  // if (href) {
-  //   return (
-  //     <Link
-  //       href={href}
-  //       className={classes}
-  //       onClick={onClick}
-  //       {...props}
-  //     >
-  //       {startIcon}
-  //       {children}
-  //       {endIcon}
-  //     </Link>
-  //   );
-  // }
-
-  // return (
-  //   <button
-  //     className={classes}
-  //     onClick={onClick}
-  //     disabled={disabled || loading}
-  //     type={type}
-  //     {...props}
-  //   >
-  //     <span className={classNames?.icon}>{startIcon}</span>
-  //     <span className={cn('flex items-center', classNames?.children)}>
-  //       {loading ? (
-  //         <Loader
-  //           color='var(--primary-color)'
-  //           size='sm'
-  //         />
-  //       ) : (
-  //         children
-  //       )}
-  //     </span>
-  //     <span className={classNames?.icon}>{endIcon}</span>
-  //   </button>
 };
 
 export default Button;
