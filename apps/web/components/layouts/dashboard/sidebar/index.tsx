@@ -13,17 +13,17 @@ const LayoutsDashboardSidebar = () => {
   const { data } = useSession();
 
   return (
-    <aside className='border-border-subtle hidden w-50 shrink-0 flex-col border-r md:flex'>
-      <div className='border-border-subtle border-b px-4 py-4'>
+    <aside className='hidden w-50 shrink-0 flex-col border-r border-border bg-surface/70 md:flex'>
+      <div className='border-b border-border px-4 py-4'>
         <Link
           href={PAGES.home}
-          className='text-heading text-[14px] font-medium'
+          className='text-[14px] font-medium text-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background'
         >
-          Critiq<span className='text-brand'>AI</span>
+          Critiq<span className='text-primary'>AI</span>
         </Link>
       </div>
 
-      <nav className='flex-1 px-2 py-2.5'>
+      <nav aria-label='Dashboard' className='flex-1 px-2 py-2.5'>
         {dashboardNavItems.map(({ label, icon: Icon, href }) => {
           const active = pathname?.startsWith(href);
 
@@ -33,11 +33,10 @@ const LayoutsDashboardSidebar = () => {
               component={Link}
               key={label}
               href={href}
+              aria-current={active ? 'page' : undefined}
               className={cn(
-                'mb-0.5 flex w-full items-center gap-2 rounded-md px-2.5 py-1.75 text-[12px] transition-colors',
-                active
-                  ? 'text-brand bg-[#1a1c2e]'
-                  : 'text-muted-text hover:bg-surface',
+                'mb-0.5 flex w-full items-center gap-2 rounded-md px-2.5 py-2 text-[12px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                active ? 'bg-primary/10 text-primary' : 'text-foreground-muted hover:bg-surface hover:text-foreground',
               )}
               startIcon={<Icon size={16} />}
             >
@@ -47,17 +46,17 @@ const LayoutsDashboardSidebar = () => {
         })}
       </nav>
 
-      <div className='border-border-subtle flex items-center gap-2 border-t p-2.5'>
-        <div className='text-brand flex h-7 w-7 items-center justify-center rounded-full border border-[#2e3148] bg-[#1a1c2e] text-[11px]'>
+      <div className='flex items-center gap-2 border-t border-border p-2.5'>
+        <div className='flex h-7 w-7 items-center justify-center rounded-full border border-border bg-surface-raised text-[11px] font-medium text-foreground'>
           {data?.user?.name?.charAt(0) || 'A'}
           {data?.user?.name?.split(' ')[1]?.charAt(0) || 'A'}
         </div>
 
         <div className='min-w-0'>
-          <div className='text-heading-soft truncate text-[12px] font-medium'>
+          <div className='truncate text-[12px] font-medium text-foreground'>
             {data?.user?.name || 'Anonymous'}
           </div>
-          <div className='text-faint text-[10px]'>Free plan</div>
+          <div className='text-[10px] text-foreground-subtle'>Free plan</div>
         </div>
       </div>
     </aside>

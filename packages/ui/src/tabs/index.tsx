@@ -86,5 +86,5 @@ const Tabs = ({ children, value, onValueChange, className, label = 'Tabs' }: Tab
 
 const Tab = ({ children }: TabProps) => <>{children}</>;
 
-export { Tabs, Tab };
+export { Tab, Tabs };
 export default Tabs;
