@@ -1,5 +1,13 @@
 import cn from '@repo/utils/cn';
-import { Children, KeyboardEvent, ReactElement, ReactNode, isValidElement, useId, useRef } from 'react';
+import {
+  Children,
+  KeyboardEvent,
+  ReactElement,
+  ReactNode,
+  isValidElement,
+  useId,
+  useRef,
+} from 'react';
 
 type TabsProps = {
   children: ReactNode;
@@ -16,12 +24,24 @@ type TabProps = {
   className?: string;
 };
 
-const Tabs = ({ children, value, onValueChange, className, label = 'Tabs', panelId }: TabsProps) => {
+const Tabs = ({
+  children,
+  value,
+  onValueChange,
+  className,
+  label = 'Tabs',
+  panelId,
+}: TabsProps) => {
   const id = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
-  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
-    const tabs = Children.toArray(children).filter(isValidElement<TabProps>) as Array<ReactElement<TabProps>>;
+  const handleKeyDown = (
+    event: KeyboardEvent<HTMLButtonElement>,
+    index: number,
+  ) => {
+    const tabs = Children.toArray(children).filter(
+      isValidElement<TabProps>,
+    ) as Array<ReactElement<TabProps>>;
     const count = tabs.length;
 
     if (count === 0) {
@@ -49,10 +69,16 @@ const Tabs = ({ children, value, onValueChange, className, label = 'Tabs', panel
     }
   };
 
-  const tabs = Children.toArray(children).filter(isValidElement<TabProps>) as Array<ReactElement<TabProps>>;
+  const tabs = Children.toArray(children).filter(
+    isValidElement<TabProps>,
+  ) as Array<ReactElement<TabProps>>;
 
   return (
-    <div className={cn('flex flex-wrap gap-2', className)} role='tablist' aria-label={label}>
+    <div
+      className={cn('flex flex-wrap gap-2', className)}
+      role='tablist'
+      aria-label={label}
+    >
       {tabs.map((tab, index) => {
         const selected = tab.props.value === value;
         const tabId = `${id}-${tab.props.value}`;
@@ -70,8 +96,10 @@ const Tabs = ({ children, value, onValueChange, className, label = 'Tabs', panel
             aria-controls={panelId}
             tabIndex={selected ? 0 : -1}
             className={cn(
-              'rounded-full border border-border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-              selected ? 'bg-primary/10 text-primary' : 'bg-surface text-foreground-muted hover:text-foreground',
+              'border-border focus-visible:ring-ring focus-visible:ring-offset-background rounded-full border px-3 py-2 text-sm font-medium transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+              selected
+                ? 'bg-primary/10 text-primary'
+                : 'bg-surface text-foreground-muted hover:text-foreground',
               tab.props.className,
             )}
             onClick={() => onValueChange(tab.props.value)}

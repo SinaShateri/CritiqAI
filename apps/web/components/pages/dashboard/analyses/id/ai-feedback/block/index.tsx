@@ -1,4 +1,4 @@
-import { AnalysisData } from "../../types";
+import { AnalysisData } from '../../types';
 
 const DashboardAnalysesIDAIFeedbackBlock = ({
   section,
@@ -11,7 +11,7 @@ const DashboardAnalysesIDAIFeedbackBlock = ({
     <div className='text-brand mb-1.5 text-[11px] font-medium'>
       {section.title}
     </div>
-    <div className='text-body text-[12px] leading-[1.75]'>
+    <div className='text-foreground-muted text-sm leading-[1.75]'>
       {section.content}
     </div>
   </div>

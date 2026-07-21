@@ -1,7 +1,9 @@
 import StreamClient from '@/components/pages/dashboard/analyses/id/stream-client';
 
-const Page = ({ params }: { params: { id: string } }) => {
-  return <StreamClient analysisId={params.id} />;
+const Page = async ({ params }: PageProps<'/dashboard/analyses/[id]'>) => {
+  const { id } = await params;
+
+  return <StreamClient analysisId={id} />;
 };
 
 export default Page;

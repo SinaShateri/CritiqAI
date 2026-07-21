@@ -1,6 +1,24 @@
-import { IconWorld } from '@tabler/icons-react';
+import Button from '@repo/ui/button';
+import Input from '@repo/ui/input';
+import Label from '@repo/ui/label';
+import SectionHeader from '@repo/ui/section-header';
+import { IconArrowRight, IconWorld } from '@tabler/icons-react';
 import AnalysisCard from '../../../shared/analysis-card';
 import StatCard from '../../../shared/stat-card';
+
+type Analyses = {
+  id: string;
+  url: string;
+  favicon: string;
+  time: string;
+  delay: string;
+  scores: {
+    label: string;
+    value: number;
+    status: 'success' | 'warn' | 'error';
+  }[];
+  analyzing?: boolean;
+}[];
 
 const stats = [
   {
@@ -26,7 +44,7 @@ const stats = [
   },
 ] as const;
 
-const analyses = [
+const analyses: Analyses = [
   {
     id: 'a1',
     url: 'https://stripe.com',
@@ -59,82 +77,76 @@ const analyses = [
     favicon: 'vercel.com',
     time: '3 days ago',
     delay: 'delay-100',
+    scores: [],
     analyzing: true,
   },
-] as {
-  id: string;
-  url: string;
-  favicon: string;
-  time: string;
-  delay: string;
-  scores: {
-    label: string;
-    value: number;
-    status: 'success' | 'warn' | 'error';
-  }[];
-  analyzing?: boolean;
-}[];
+];
 
-const DashboardOverview = () => {
-  return (
-    <>
-      <section className='animate-fade-up border-border-subtle bg-surface mb-5 rounded-lg border p-4'>
-        <div className='text-muted-text mb-2.5 text-[10px] tracking-[1.5px]'>
-          ANALYZE A WEBSITE
+const DashboardOverview = () => (
+  <>
+    <section className='animate-fade-up border-border bg-surface mb-5 rounded-lg border p-4'>
+      <SectionHeader
+        eyebrow='Analyze a website'
+        title='Start a new audit'
+        titleClassName='sr-only'
+      />
+      <form className='border-border-strong bg-background focus-within:border-primary mt-2.5 flex overflow-hidden rounded-md border'>
+        <div className='border-border flex items-center border-r px-3.5'>
+          <IconWorld
+            aria-hidden='true'
+            size={16}
+            className='text-foreground-subtle'
+          />
         </div>
-
-        <form className='border-border-strong bg-bg focus-within:border-brand flex overflow-hidden rounded-md border transition-colors'>
-          <div className='border-border-subtle flex items-center border-r px-3.5'>
-            <IconWorld
-              size={16}
-              className='text-faint'
-            />
-          </div>
-
-          <input
-            type='text'
-            placeholder='https://yourwebsite.com'
-            className='text-heading-soft placeholder:text-muted-text flex-1 bg-transparent px-3.5 py-2.5 text-[13px] outline-none'
-          />
-
-          <button
-            type='submit'
-            className='bg-brand hover:bg-brand-hover px-4.5 text-[13px] font-medium text-white transition-colors'
-          >
-            Analyze →
-          </button>
-        </form>
-      </section>
-
-      <section className='mb-5 grid grid-cols-1 gap-2.5 sm:grid-cols-3'>
-        {stats.map((stat) => (
-          <StatCard
-            key={stat.title}
-            {...stat}
-          />
-        ))}
-      </section>
-
-      <div className='mb-3 flex items-center justify-between'>
-        <h2 className='text-heading-soft text-[13px] font-medium'>
-          Recent analyses
-        </h2>
-
-        <button className='text-brand text-xs hover:underline'>
-          View all →
-        </button>
-      </div>
-
-      <section>
-        {analyses.map((analysis) => (
-          <AnalysisCard
-            key={analysis.id}
-            {...analysis}
-          />
-        ))}
-      </section>
-    </>
-  );
-};
+        <Label
+          htmlFor='dashboard-website-url'
+          className='sr-only'
+        >
+          Website URL to analyze
+        </Label>
+        <Input
+          id='dashboard-website-url'
+          name='website-url'
+          type='url'
+          required
+          placeholder='https://yourwebsite.com'
+          className='h-auto flex-1 rounded-none border-0 bg-transparent px-3.5 py-2.5 text-sm shadow-none focus-visible:ring-0'
+        />
+        <Button
+          type='submit'
+          className='rounded-none px-4.5'
+          endIcon={<IconArrowRight size={16} />}
+        >
+          Analyze
+        </Button>
+      </form>
+    </section>
+    <section className='mb-5 grid grid-cols-1 gap-2.5 sm:grid-cols-3'>
+      {stats.map((stat) => (
+        <StatCard
+          key={stat.title}
+          {...stat}
+        />
+      ))}
+    </section>
+    <div className='mb-3 flex items-center justify-between'>
+      <h2 className='text-foreground text-sm font-medium'>Recent analyses</h2>
+      <button
+        type='button'
+        className='text-primary focus-visible:ring-ring text-xs hover:underline focus-visible:ring-2 focus-visible:outline-none'
+      >
+        View all
+      </button>
+    </div>
+    <section aria-label='Recent analyses'>
+      {analyses.map((analysis) => (
+        <AnalysisCard
+          key={analysis.id}
+          {...analysis}
+        />
+      ))}
+    </section>
+  </>
+);
 
 export default DashboardOverview;

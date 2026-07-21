@@ -8,9 +8,9 @@ const DashboardAnalysesIDPerformanceMetrics = ({
 }) => {
   return (
     <section className='p-5'>
-      <div className='mb-3 text-[10px] font-medium tracking-[1.5px] text-[#4a4f62]'>
+      <h2 className='text-foreground-subtle mb-3 text-xs font-semibold tracking-[1.5px]'>
         PERFORMANCE METRICS
-      </div>
+      </h2>
       {metrics.map((metric) => (
         <DashboardAnalysesIDPerformanceMetricsBar
           key={metric.key}

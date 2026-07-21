@@ -13,7 +13,11 @@ Example (enqueue):
 ```ts
 import { enqueueAnalysis } from '@repo/queue';
 
-await enqueueAnalysis({ url: 'https://example.com', userId: '...', analysisId: '...' });
+await enqueueAnalysis({
+  url: 'https://example.com',
+  userId: '...',
+  analysisId: '...',
+});
 ```
 
 Example (worker):

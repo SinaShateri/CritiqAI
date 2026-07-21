@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useEffect, useState } from 'react';
 import DashboardAnalysesID from './index';
@@ -18,7 +18,10 @@ export default function StreamClient({ analysisId }: { analysisId: string }) {
       try {
         const payload = JSON.parse(e.data as string) as Record<string, unknown>;
         // optional: update step statuses if provided
-        const stage = typeof payload?.stage === 'string' ? (payload.stage as string) : undefined;
+        const stage =
+          typeof payload?.stage === 'string'
+            ? (payload.stage as string)
+            : undefined;
         if (stage) {
           setData((d) => ({ ...d }));
         }
@@ -41,11 +44,19 @@ export default function StreamClient({ analysisId }: { analysisId: string }) {
       try {
         const payload = JSON.parse(e.data as string) as unknown;
         type LHCategory = { score?: number };
-        type LHReport = { categories?: { performance?: LHCategory; accessibility?: LHCategory; seo?: LHCategory } };
+        type LHReport = {
+          categories?: {
+            performance?: LHCategory;
+            accessibility?: LHCategory;
+            seo?: LHCategory;
+          };
+        };
 
         const report =
           payload && typeof payload === 'object'
-            ? ((payload as Record<string, unknown>)['report'] as LHReport | undefined)
+            ? ((payload as Record<string, unknown>)['report'] as
+                | LHReport
+                | undefined)
             : undefined;
 
         const perf = report?.categories?.performance?.score ?? null;
@@ -55,9 +66,12 @@ export default function StreamClient({ analysisId }: { analysisId: string }) {
         setData((d) => ({
           ...d,
           scores: d.scores.map((s) => {
-            if (s.key === 'performance') return { ...s, value: Math.round((perf ?? s.value) * 100) };
-            if (s.key === 'accessibility') return { ...s, value: Math.round((a11y ?? s.value) * 100) };
-            if (s.key === 'seo') return { ...s, value: Math.round((seo ?? s.value) * 100) };
+            if (s.key === 'performance')
+              return { ...s, value: Math.round((perf ?? s.value) * 100) };
+            if (s.key === 'accessibility')
+              return { ...s, value: Math.round((a11y ?? s.value) * 100) };
+            if (s.key === 'seo')
+              return { ...s, value: Math.round((seo ?? s.value) * 100) };
             return s;
           }),
         }));
@@ -69,7 +83,11 @@ export default function StreamClient({ analysisId }: { analysisId: string }) {
     es.addEventListener('accessibility', (e: MessageEvent) => {
       try {
         const payload = JSON.parse(e.data as string) as { issues?: unknown };
-        if (payload?.issues) setData((d) => ({ ...d, issues: payload.issues as unknown as AnalysisData['issues'] }));
+        if (payload?.issues)
+          setData((d) => ({
+            ...d,
+            issues: payload.issues as unknown as AnalysisData['issues'],
+          }));
       } catch (err) {
         console.warn('Failed to parse accessibility event', err);
       }
@@ -78,7 +96,11 @@ export default function StreamClient({ analysisId }: { analysisId: string }) {
     es.addEventListener('seo', (e: MessageEvent) => {
       try {
         const payload = JSON.parse(e.data as string) as { issues?: unknown };
-        if (payload?.issues) setData((d) => ({ ...d, issues: payload.issues as unknown as AnalysisData['issues'] }));
+        if (payload?.issues)
+          setData((d) => ({
+            ...d,
+            issues: payload.issues as unknown as AnalysisData['issues'],
+          }));
       } catch (err) {
         console.warn('Failed to parse seo event', err);
       }
@@ -86,16 +108,30 @@ export default function StreamClient({ analysisId }: { analysisId: string }) {
 
     es.addEventListener('ai_feedback', (e: MessageEvent) => {
       try {
-        const payload = JSON.parse(e.data as string) as { suggestions?: unknown };
+        const payload = JSON.parse(e.data as string) as {
+          suggestions?: unknown;
+        };
         const suggestions = payload?.suggestions;
         const aiFeedback = Array.isArray(suggestions)
           ? suggestions.map((s: unknown, i: number) => {
               const so = s as Record<string, unknown>;
-              const title = typeof so?.['title'] === 'string' ? (so['title'] as string) : 'Suggestion';
-              const content = typeof so?.['content'] === 'string' ? (so['content'] as string) : JSON.stringify(so);
+              const title =
+                typeof so?.['title'] === 'string'
+                  ? (so['title'] as string)
+                  : 'Suggestion';
+              const content =
+                typeof so?.['content'] === 'string'
+                  ? (so['content'] as string)
+                  : JSON.stringify(so);
               return { id: String(i), title, content };
             })
-          : [{ id: 'ai-1', title: 'AI Suggestions', content: JSON.stringify(suggestions) }];
+          : [
+              {
+                id: 'ai-1',
+                title: 'AI Suggestions',
+                content: JSON.stringify(suggestions),
+              },
+            ];
 
         setData((d) => ({ ...d, aiFeedback }));
       } catch (err) {

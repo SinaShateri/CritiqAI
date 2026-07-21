@@ -23,7 +23,12 @@ const Button = <T extends ElementType = 'button'>({
   const isButtonElement = Component === 'button';
   const hasIconOnlyChild = !children && (startIcon || endIcon);
 
-  if (process.env.NODE_ENV !== 'production' && hasIconOnlyChild && !props['aria-label'] && !props['aria-labelledby']) {
+  if (
+    process.env.NODE_ENV !== 'production' &&
+    hasIconOnlyChild &&
+    !props['aria-label'] &&
+    !props['aria-labelledby']
+  ) {
     console.warn('Button uses icon-only content without an accessible label.');
   }
 
@@ -41,32 +46,52 @@ const Button = <T extends ElementType = 'button'>({
 
   const variantStyles = {
     default: 'border-transparent bg-transparent text-foreground',
-    filled: 'border-transparent bg-primary text-primary-foreground hover:bg-primary/90',
-    'outlined-primary': 'border-primary/40 bg-transparent text-primary hover:bg-primary/10',
-    'outlined-gray': 'border-border bg-transparent text-foreground-muted hover:bg-surface',
+    filled:
+      'border-transparent bg-primary text-primary-foreground hover:bg-primary/90',
+    'outlined-primary':
+      'border-primary/40 bg-transparent text-primary hover:bg-primary/10',
+    'outlined-gray':
+      'border-border bg-transparent text-foreground-muted hover:bg-surface',
     text: 'border-transparent bg-transparent text-primary hover:bg-primary/10',
-    elevated: 'border-primary/20 bg-surface-raised text-foreground hover:bg-surface',
+    elevated:
+      'border-primary/20 bg-surface-raised text-foreground hover:bg-surface',
     tonal:
       tonalTheme === 'primary'
         ? 'border-transparent bg-primary text-primary-foreground hover:bg-primary/90'
         : 'border-border bg-surface text-foreground hover:bg-surface-raised',
   };
 
-  const classes = cn(baseStyles, variantStyles[variant as ButtonVariant], paddingStyles[padding], className);
+  const classes = cn(
+    baseStyles,
+    variantStyles[variant as ButtonVariant],
+    paddingStyles[padding],
+    className,
+  );
 
   return (
     <Component
       className={classes}
       aria-busy={loading || undefined}
       disabled={isButtonElement ? disabled || loading : undefined}
-      type={isButtonElement ? type ?? 'button' : undefined}
+      type={isButtonElement ? (type ?? 'button') : undefined}
       {...props}
     >
-      {startIcon ? <span className={cn('shrink-0', classNames?.icon)}>{startIcon}</span> : null}
+      {startIcon ? (
+        <span className={cn('shrink-0', classNames?.icon)}>{startIcon}</span>
+      ) : null}
       <span className={cn('flex items-center', classNames?.children)}>
-        {loading ? <IconLoader4 size={18} className='animate-spin' /> : children}
+        {loading ? (
+          <IconLoader4
+            size={18}
+            className='animate-spin'
+          />
+        ) : (
+          children
+        )}
       </span>
-      {endIcon ? <span className={cn('shrink-0', classNames?.icon)}>{endIcon}</span> : null}
+      {endIcon ? (
+        <span className={cn('shrink-0', classNames?.icon)}>{endIcon}</span>
+      ) : null}
     </Component>
   );
 };

@@ -8,9 +8,9 @@ const DashboardAnalysesIDQuickWins = ({
 }) => {
   return (
     <section className='border-border-subtle border-b p-5'>
-      <div className='mb-3 text-[10px] font-medium tracking-[1.5px] text-[#4a4f62]'>
+      <h2 className='text-foreground-subtle mb-3 text-xs font-semibold tracking-[1.5px]'>
         QUICK WINS
-      </div>
+      </h2>
       <div>
         {quickWins.map((win, index) => (
           <DashboardAnalysesIDQuickWinsRow

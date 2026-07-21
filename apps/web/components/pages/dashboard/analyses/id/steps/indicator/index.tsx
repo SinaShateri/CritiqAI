@@ -21,7 +21,7 @@ const DashboardAnalysesIDStepsIndicator = ({
         <div className='bg-brand flex h-5 w-5 items-center justify-center rounded-full'>
           <IconCheck
             size={16}
-            className='text-white'
+            className='text-primary-foreground'
           />
         </div>
       ) : step.status === 'active' ? (
@@ -32,7 +32,7 @@ const DashboardAnalysesIDStepsIndicator = ({
         </div>
       ) : (
         <div className='border-border-subtle flex h-5 w-5 items-center justify-center rounded-full border-2'>
-          <span className='text-[10px] font-medium text-[#4a4f62]'>
+          <span className='text-foreground-subtle text-xs font-medium'>
             {index + 1}
           </span>
         </div>
@@ -40,8 +40,8 @@ const DashboardAnalysesIDStepsIndicator = ({
       <span
         className={
           step.status === 'active'
-            ? 'text-brand text-[11px]'
-            : 'text-muted-text text-[11px]'
+            ? 'text-primary text-sm'
+            : 'text-foreground-muted text-sm'
         }
       >
         {step.label}

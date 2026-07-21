@@ -1,46 +1,35 @@
+import Badge from '@repo/ui/badge';
 import { AnalysisData } from '../../types';
 
-const scoreRingStyle = (score: number) => {
-  if (score >= 90) {
-    return {
-      border: '2px solid rgb(62, 207, 142)',
-      background: 'rgb(14, 34, 24)',
-      color: 'rgb(62, 207, 142)',
-    };
-  }
-  if (score >= 50) {
-    return {
-      border: '2px solid rgb(244, 168, 35)',
-      background: 'rgb(34, 26, 12)',
-      color: 'rgb(244, 168, 35)',
-    };
-  }
-  return {
-    border: '2px solid rgb(226, 87, 87)',
-    background: 'rgb(42, 14, 14)',
-    color: 'rgb(226, 87, 87)',
-  };
-};
-
+const scoreTone = (score: number) =>
+  score >= 90
+    ? ('success' as const)
+    : score >= 50
+      ? ('warn' as const)
+      : ('error' as const);
 const DashboardAnalysesIDScoresCard = ({
   score,
 }: {
   score: AnalysisData['scores'][number];
-}) => (
-  <div className='border-border-subtle bg-surface flex items-center gap-3 rounded-lg border px-3.5 py-3'>
-    <div
-      className='animate-fade-up flex h-9 w-9 items-center justify-center rounded-full text-[13px] font-medium'
-      style={scoreRingStyle(score.value)}
-    >
-      {score.value}
-    </div>
-    <div className='min-w-0'>
-      <div className='text-heading-soft truncate text-[12px] font-medium'>
-        {score.label}
+}) => {
+  const tone = scoreTone(score.value);
+  return (
+    <div className='border-border bg-surface flex items-center gap-3 rounded-lg border px-3.5 py-3'>
+      <Badge
+        variant={tone}
+        className='font-mono text-sm'
+      >
+        {score.value}
+      </Badge>
+      <div className='min-w-0'>
+        <div className='text-foreground truncate text-sm font-medium'>
+          {score.label}
+        </div>
+        <div className='text-foreground-subtle truncate text-xs'>
+          {score.detail}
+        </div>
       </div>
-      <div className='text-faint truncate text-[11px]'>{score.detail}</div>
     </div>
-  </div>
-);
-
+  );
+};
 export default DashboardAnalysesIDScoresCard;

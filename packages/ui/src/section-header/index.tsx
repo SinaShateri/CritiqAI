@@ -9,17 +9,32 @@ type SectionHeaderProps = {
   titleClassName?: string;
 };
 
-const SectionHeader = ({ eyebrow, title, description, className, titleClassName }: SectionHeaderProps) => {
+const SectionHeader = ({
+  eyebrow,
+  title,
+  description,
+  className,
+  titleClassName,
+}: SectionHeaderProps) => {
   return (
     <div className={cn('space-y-2', className)}>
       {eyebrow ? (
-        <p className='text-[0.7rem] font-semibold uppercase tracking-[0.24em] text-foreground-subtle'>
+        <p className='text-foreground-subtle text-[0.7rem] font-semibold tracking-[0.24em] uppercase'>
           {eyebrow}
         </p>
       ) : null}
       <div className='space-y-1'>
-        <h2 className={cn('text-lg font-semibold text-foreground', titleClassName)}>{title}</h2>
-        {description ? <p className='text-sm text-foreground-muted'>{description}</p> : null}
+        <h2
+          className={cn(
+            'text-foreground text-lg font-semibold',
+            titleClassName,
+          )}
+        >
+          {title}
+        </h2>
+        {description ? (
+          <p className='text-foreground-muted text-sm'>{description}</p>
+        ) : null}
       </div>
     </div>
   );

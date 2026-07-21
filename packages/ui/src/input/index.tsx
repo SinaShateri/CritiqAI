@@ -10,7 +10,7 @@ const Input = ({ className, invalid = false, ...props }: InputProps) => {
   return (
     <input
       className={cn(
-        'flex h-11 w-full rounded-lg border border-border bg-surface px-3 py-2 text-sm text-foreground shadow-sm placeholder:text-foreground-subtle transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60',
+        'border-border bg-surface text-foreground placeholder:text-foreground-subtle focus-visible:ring-ring focus-visible:ring-offset-background flex h-11 w-full rounded-lg border px-3 py-2 text-sm shadow-sm transition-colors focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-60',
         invalid && 'border-error',
         className,
       )}

@@ -10,14 +10,14 @@ const HomeFeatureCard = ({
 }: FeatureCardProps) => {
   return (
     <div
-      className='animate-fade-up rounded-lg border border-border bg-surface p-5 transition-colors hover:border-border-strong'
+      className='animate-fade-up border-border bg-surface hover:border-border-strong rounded-lg border p-5 transition-colors'
       style={{ animationDelay: delay }}
     >
-      <Icon className='mb-3 text-brand' />
+      <Icon className='text-brand mb-3' />
 
-      <h3 className='text-sm font-medium text-foreground'>{title}</h3>
+      <h3 className='text-foreground text-sm font-medium'>{title}</h3>
 
-      <p className='mt-1 text-sm leading-[1.6] text-foreground-muted'>
+      <p className='text-foreground-muted mt-1 text-sm leading-[1.6]'>
         {description}
       </p>
     </div>

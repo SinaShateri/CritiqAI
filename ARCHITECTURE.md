@@ -30,14 +30,14 @@ The analysis record is the integration boundary between the web runtime and the 
 
 The root `pnpm-workspace.yaml` includes `apps/*` and `packages/*`. Turborepo orchestrates builds, development processes, linting, type checks, and Prisma tasks. Workspace imports use the `@repo/*` namespace.
 
-| Area | Owns | Must not own |
-| --- | --- | --- |
-| `apps/web` | HTTP/UI boundary, authentication, dashboard pages, request initiation, live result presentation | Long-running audits or browser automation |
-| `apps/worker` | Long-running analysis pipeline and result persistence | Page rendering or session/UI behavior |
-| `packages/database` | Prisma schema, migrations, generated client, shared database connection | Web-specific query presentation |
-| `packages/queue` | Queue names, job contracts, BullMQ factories, retries and worker wrapper | Audit implementation |
-| `packages/ui` | Reusable presentational primitives | Product-specific page composition or data fetching |
-| `packages/constants`, `packages/utils` | Cross-cutting values and small pure/client utilities | Application workflows |
+| Area                                   | Owns                                                                                            | Must not own                                       |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `apps/web`                             | HTTP/UI boundary, authentication, dashboard pages, request initiation, live result presentation | Long-running audits or browser automation          |
+| `apps/worker`                          | Long-running analysis pipeline and result persistence                                           | Page rendering or session/UI behavior              |
+| `packages/database`                    | Prisma schema, migrations, generated client, shared database connection                         | Web-specific query presentation                    |
+| `packages/queue`                       | Queue names, job contracts, BullMQ factories, retries and worker wrapper                        | Audit implementation                               |
+| `packages/ui`                          | Reusable presentational primitives                                                              | Product-specific page composition or data fetching |
+| `packages/constants`, `packages/utils` | Cross-cutting values and small pure/client utilities                                            | Application workflows                              |
 
 This separation keeps slow and resource-heavy work out of the request/response lifecycle. Both the web app and worker import the same database and job contracts, reducing drift in record and queue use.
 
@@ -161,15 +161,15 @@ Authentication is configured in `lib/auth/config.ts` using NextAuth with PrismaA
 
 `app/api/stream/[id]/route.ts` implements server-sent events (SSE). For a given analysis ID, it polls PostgreSQL every 1.5 seconds, compares a snapshot to the previous one, and emits only changed data:
 
-| SSE event | Meaning |
-| --- | --- |
-| `progress` | The persisted `Analysis.status` changed or was initially read |
-| `screenshot` | A screenshot path became available |
-| `lighthouse` | Lighthouse report changed |
-| `accessibility` | Accessibility issue data changed |
-| `seo` | SEO issue data changed |
-| `ai_feedback` | AI suggestion data changed |
-| `complete` | Status transitioned to `COMPLETED`; stream closes shortly afterward |
+| SSE event       | Meaning                                                             |
+| --------------- | ------------------------------------------------------------------- |
+| `progress`      | The persisted `Analysis.status` changed or was initially read       |
+| `screenshot`    | A screenshot path became available                                  |
+| `lighthouse`    | Lighthouse report changed                                           |
+| `accessibility` | Accessibility issue data changed                                    |
+| `seo`           | SEO issue data changed                                              |
+| `ai_feedback`   | AI suggestion data changed                                          |
+| `complete`      | Status transitioned to `COMPLETED`; stream closes shortly afterward |
 
 The analysis detail client (`components/pages/dashboard/analyses/id/stream-client.tsx`) opens an `EventSource`, maps events to its local presentation model, and closes on completion or unmount.
 
@@ -207,13 +207,13 @@ Redis is configured through `REDIS_URL`, defaulting to `redis://localhost:6379` 
 
 ### 5.3 Worker stages
 
-| Module | Technology | Output written to `Analysis` |
-| --- | --- | --- |
-| `playwright.worker.ts` | Playwright/Chromium | Full-page PNG path, HTML, stylesheet/script lists, browser performance entries |
-| `lighthouse.worker.ts` | Chrome Launcher + Lighthouse | Performance, SEO, accessibility, and best-practice (UX) scores; report; selected audit issues |
-| `axe.worker.ts` | Playwright + injected axe-core | Detailed WCAG/best-practice violations |
-| `seo.worker.ts` | Cheerio | Title, description, heading, image, Open Graph, JSON-LD, and link findings |
-| `ai-analyzer.worker.ts` | OpenAI chat completions | UX feedback, redesign suggestions, and placeholder arrays for quick wins/bottlenecks |
+| Module                  | Technology                     | Output written to `Analysis`                                                                  |
+| ----------------------- | ------------------------------ | --------------------------------------------------------------------------------------------- |
+| `playwright.worker.ts`  | Playwright/Chromium            | Full-page PNG path, HTML, stylesheet/script lists, browser performance entries                |
+| `lighthouse.worker.ts`  | Chrome Launcher + Lighthouse   | Performance, SEO, accessibility, and best-practice (UX) scores; report; selected audit issues |
+| `axe.worker.ts`         | Playwright + injected axe-core | Detailed WCAG/best-practice violations                                                        |
+| `seo.worker.ts`         | Cheerio                        | Title, description, heading, image, Open Graph, JSON-LD, and link findings                    |
+| `ai-analyzer.worker.ts` | OpenAI chat completions        | UX feedback, redesign suggestions, and placeholder arrays for quick wins/bottlenecks          |
 
 The worker pipeline is sequential. This is appropriate because later stages rely on data from earlier stages, especially SEO and AI analysis reading data saved by the scraper/Lighthouse. If stages become independent, they can be split into child jobs, but then finalization and failure handling must coordinate multiple job outcomes.
 
@@ -242,13 +242,13 @@ VerificationRateLimit      (email verification resend throttling)
 
 `Analysis` is the domain aggregate for a website audit. Its key fields are:
 
-| Field group | Fields | Purpose |
-| --- | --- | --- |
-| Identity/ownership | `id`, `userId`, `url` | Identifies the audit and its owner |
-| Lifecycle | `status`, `createdAt`, `completedAt` | Tracks the workflow state and timing |
-| Scores | `perfScore`, `seoScore`, `a11yScore`, `uxScore` | Stores normalized 0–100 category scores |
-| Detailed artifacts | `lighthouseReport`, `accessibilityIssues`, `seoIssues`, `aiSuggestions` | JSON payloads produced by stages |
-| Visual artifact | `screenshotUrl` | Current implementation stores a worker-local screenshot path |
+| Field group        | Fields                                                                  | Purpose                                                      |
+| ------------------ | ----------------------------------------------------------------------- | ------------------------------------------------------------ |
+| Identity/ownership | `id`, `userId`, `url`                                                   | Identifies the audit and its owner                           |
+| Lifecycle          | `status`, `createdAt`, `completedAt`                                    | Tracks the workflow state and timing                         |
+| Scores             | `perfScore`, `seoScore`, `a11yScore`, `uxScore`                         | Stores normalized 0–100 category scores                      |
+| Detailed artifacts | `lighthouseReport`, `accessibilityIssues`, `seoIssues`, `aiSuggestions` | JSON payloads produced by stages                             |
+| Visual artifact    | `screenshotUrl`                                                         | Current implementation stores a worker-local screenshot path |
 
 Valid statuses are `PENDING`, `SCRAPING`, `ANALYZING`, `AI_PROCESSING`, `COMPLETED`, and `FAILED`. The implementation currently sets `PENDING`, `SCRAPING`, `ANALYZING`, `COMPLETED`, and `FAILED`; `AI_PROCESSING` is available in the schema but is not currently assigned by the worker.
 
@@ -276,18 +276,18 @@ Contains generic helpers such as Tailwind class merging (`cn`), cookie access, a
 
 Turborepo declares the following environment values as task inputs: `DATABASE_URL`, `AUTH_SECRET`, `NEXTAUTH_URL`, OAuth client credentials, email settings, `OPENAI_API_KEY`, `PLAYWRIGHT_TIMEOUT`, and `REDIS_URL`.
 
-| Variable | Consumer | Required purpose |
-| --- | --- | --- |
-| `DATABASE_URL` | web, worker, database package | PostgreSQL connection string |
-| `REDIS_URL` | queue producer and worker | Shared BullMQ Redis connection |
-| `AUTH_SECRET` / NextAuth secret | web | Session/JWT security; keep naming consistent with deployed NextAuth configuration |
-| `NEXTAUTH_URL` | web | Canonical application URL for NextAuth |
-| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET` | web | Google OAuth |
-| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET` | web | GitHub OAuth |
-| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASS`, `EMAIL_FROM` | web | Verification email delivery |
-| `OPENAI_API_KEY` | worker | AI analysis calls |
-| `PLAYWRIGHT_TIMEOUT` | worker | Browser navigation timeout (defaults to 30 seconds) |
-| `WORKER_CONCURRENCY` | worker | Concurrent BullMQ job processing (defaults to 3) |
+| Variable                                                             | Consumer                      | Required purpose                                                                  |
+| -------------------------------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------- |
+| `DATABASE_URL`                                                       | web, worker, database package | PostgreSQL connection string                                                      |
+| `REDIS_URL`                                                          | queue producer and worker     | Shared BullMQ Redis connection                                                    |
+| `AUTH_SECRET` / NextAuth secret                                      | web                           | Session/JWT security; keep naming consistent with deployed NextAuth configuration |
+| `NEXTAUTH_URL`                                                       | web                           | Canonical application URL for NextAuth                                            |
+| `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`                           | web                           | Google OAuth                                                                      |
+| `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`                           | web                           | GitHub OAuth                                                                      |
+| `EMAIL_HOST`, `EMAIL_PORT`, `EMAIL_USER`, `EMAIL_PASS`, `EMAIL_FROM` | web                           | Verification email delivery                                                       |
+| `OPENAI_API_KEY`                                                     | worker                        | AI analysis calls                                                                 |
+| `PLAYWRIGHT_TIMEOUT`                                                 | worker                        | Browser navigation timeout (defaults to 30 seconds)                               |
+| `WORKER_CONCURRENCY`                                                 | worker                        | Concurrent BullMQ job processing (defaults to 3)                                  |
 
 Do not commit secrets. Keep local environment files outside source control and configure the same shared values for both web and worker deployments.
 

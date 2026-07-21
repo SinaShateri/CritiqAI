@@ -1,4 +1,4 @@
-import { AnalysisStep } from "./steps/indicator";
+import { AnalysisStep } from './steps/indicator';
 
 export type Severity = 'critical' | 'warning' | 'info';
 export type Impact = 'high' | 'medium';

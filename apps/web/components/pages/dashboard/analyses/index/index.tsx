@@ -7,7 +7,7 @@ import {
   IconDotsVertical,
   IconFilter,
   IconSearch,
-  IconWorld
+  IconWorld,
 } from '@tabler/icons-react';
 
 type Score = number | null;

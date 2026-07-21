@@ -7,7 +7,7 @@ const HomeHero = () => {
   return (
     <section className='border-border-subtle border-b px-6 pt-20 pb-16 text-center'>
       <div className='mx-auto max-w-3xl'>
-        <div className='animate-fade-up inline-flex items-center gap-2 rounded-full border border-border bg-surface-raised px-3.5 py-1'>
+        <div className='animate-fade-up border-border bg-surface-raised inline-flex items-center gap-2 rounded-full border px-3.5 py-1'>
           <span className='bg-brand h-1.5 w-1.5 rounded-full'></span>
           <span className='text-brand text-[12px]'>
             AI-Powered Website Analysis
@@ -24,20 +24,26 @@ const HomeHero = () => {
           We find them in seconds.
         </h1>
         <p
-          className='animate-fade-up mt-4 text-base text-foreground-muted'
+          className='animate-fade-up text-foreground-muted mt-4 text-base'
           style={{ animationDelay: '0.15s' }}
         >
           Paste any URL. Get a full live report on performance, SEO,
           accessibility &amp; AI redesign suggestions.
         </p>
         <form
-          className='animate-fade-up mx-auto mt-8 flex max-w-130 rounded-lg border border-border-strong bg-surface'
+          className='animate-fade-up border-border-strong bg-surface mx-auto mt-8 flex max-w-130 rounded-lg border'
           style={{ animationDelay: '0.2s' }}
         >
           <div className='border-border-subtle flex items-center border-r px-3.5'>
-            <IconWorld aria-hidden='true' className='text-foreground-subtle' />
+            <IconWorld
+              aria-hidden='true'
+              className='text-foreground-subtle'
+            />
           </div>
-          <Label htmlFor='website-url' className='sr-only'>
+          <Label
+            htmlFor='website-url'
+            className='sr-only'
+          >
             Website URL to analyze
           </Label>
           <Input
@@ -55,7 +61,7 @@ const HomeHero = () => {
             Analyze
           </Button>
         </form>
-        <p className='mt-4 text-xs text-foreground-subtle'>
+        <p className='text-foreground-subtle mt-4 text-xs'>
           No signup required · Results in ~30 seconds
         </p>
       </div>

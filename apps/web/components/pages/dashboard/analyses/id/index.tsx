@@ -14,7 +14,7 @@ const DashboardAnalysesID = ({
   data?: AnalysisData;
 }) => {
   return (
-    <div className='bg-bg flex min-h-screen w-full flex-col'>
+    <div className='bg-background flex min-h-screen w-full flex-col'>
       <DashboardAnalysesIDHeading url={data.url} />
 
       <DashboardAnalysesIDSteps steps={data.steps} />

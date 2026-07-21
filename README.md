@@ -21,6 +21,7 @@ CritiqAI is a sophisticated monorepo built with [Turborepo](https://turborepo.de
 ## 🛠 Tech Stack
 
 ### Core Technologies
+
 - **Monorepo**: [Turborepo](https://turborepo.dev) - High-performance build system
 - **Runtime**: [Node.js](https://nodejs.org) ≥18
 - **Package Manager**: [pnpm](https://pnpm.io) 9.0.0
@@ -28,12 +29,14 @@ CritiqAI is a sophisticated monorepo built with [Turborepo](https://turborepo.de
 - **Framework**: [Next.js](https://nextjs.org) 16
 
 ### Frontend
+
 - **UI Framework**: [React](https://react.dev) 19
 - **Styling**: [Tailwind CSS](https://tailwindcss.com) with PostCSS
 - **Icons**: [Tabler Icons React](https://tabler.io/icons)
 - **Validation**: [Zod](https://zod.dev)
 
 ### Backend & Database
+
 - **Database**: PostgreSQL
 - **ORM**: [Prisma](https://www.prisma.io)
 - **Authentication**: [NextAuth.js](https://next-auth.js.org) 4.24
@@ -41,6 +44,7 @@ CritiqAI is a sophisticated monorepo built with [Turborepo](https://turborepo.de
 - **Password Hashing**: [bcryptjs](https://github.com/dcodeIO/bcrypt.js)
 
 ### Development Tools
+
 - **Linting**: [ESLint](https://eslint.org) 9
 - **Code Formatting**: [Prettier](https://prettier.io)
 - **Containerization**: [Docker](https://www.docker.com)
@@ -76,13 +80,16 @@ CritiqAI/
 ## 📦 Key Applications
 
 ### Web App (`apps/web`)
+
 The main application featuring:
+
 - User authentication with email verification
 - NextAuth.js integration with Prisma adapter
 - Protected routes and API endpoints
 - Responsive UI with Tailwind CSS
 
 ### Docs App (`apps/docs`)
+
 Documentation and additional content site built with Next.js.
 
 ## 📋 Prerequisites
@@ -99,6 +106,7 @@ Before you begin, ensure you have the following installed:
   - [Download Docker Engine (Linux)](https://docs.docker.com/engine/install)
 
 ### Environment Variables
+
 You'll need to set up environment files for database and authentication:
 
 - `.env` (root level) - Database and general configuration
@@ -107,18 +115,22 @@ You'll need to set up environment files for database and authentication:
 ## 🚀 Quick Start
 
 ### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/SinaShateri/CritiqAI.git
 cd CritiqAI
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 pnpm install
 ```
 
 ### 3. Set Up Environment Variables
+
 Create `.env` in the root directory:
+
 ```env
 # Database
 DATABASE_URL="postgresql://user:password@localhost:5432/critiqai"
@@ -129,6 +141,7 @@ NEXTAUTH_SECRET="your-secret-key-here"
 ```
 
 Create `apps/web/.env.local`:
+
 ```env
 NEXT_PUBLIC_API_URL="http://localhost:3000"
 NEXTAUTH_URL="http://localhost:3000"
@@ -138,27 +151,33 @@ NEXTAUTH_SECRET="your-secret-key-here"
 ### 4. Set Up the Database
 
 #### Option A: Using Docker Compose (Recommended)
+
 ```bash
 docker-compose up -d
 ```
 
 #### Option B: Manual PostgreSQL Setup
+
 Ensure PostgreSQL is running and create the database:
+
 ```sql
 CREATE DATABASE critiqai;
 ```
 
 ### 5. Run Prisma Migrations
+
 ```bash
 pnpm run prisma:migrate
 ```
 
 ### 6. Start Development Server
+
 ```bash
 pnpm dev
 ```
 
 The applications will start at:
+
 - **Web**: http://localhost:3000
 - **Docs**: http://localhost:3001 (if configured separately)
 
@@ -167,43 +186,55 @@ The applications will start at:
 ### Project Commands
 
 #### Development
+
 Start all applications in development mode with hot reloading:
+
 ```bash
 pnpm dev
 ```
 
 Develop a specific application:
+
 ```bash
 pnpm dev --filter=web
 pnpm dev --filter=docs
 ```
 
 #### Building
+
 Build all applications and packages:
+
 ```bash
 pnpm build
 ```
 
 Build a specific package:
+
 ```bash
 pnpm build --filter=web
 pnpm build --filter=@repo/ui
 ```
 
 #### Type Checking
+
 Check TypeScript types across the entire monorepo:
+
 ```bash
 pnpm check-types
 ```
 
 #### Linting
+
 Run ESLint across all packages:
+
 ```bash
 pnpm lint
 ```
 
 #### Code Formatting
+
 Format all TypeScript, TSX, and Markdown files:
+
 ```bash
 pnpm format
 ```
@@ -211,6 +242,7 @@ pnpm format
 ### Adding Dependencies
 
 Install a dependency in a specific workspace:
+
 ```bash
 # Add to web app
 pnpm --filter=web add package-name
@@ -225,6 +257,7 @@ pnpm --filter=web add -D package-name
 ### Creating New Components
 
 Components should be added to `packages/ui/src/` for shared usage:
+
 ```bash
 # Example: Creating a new button variant in the UI package
 # Edit packages/ui/src/button/index.tsx
@@ -233,6 +266,7 @@ Components should be added to `packages/ui/src/` for shared usage:
 ### Database Changes
 
 When modifying the Prisma schema:
+
 ```bash
 # Create a new migration
 pnpm run prisma:migrate:dev --name descriptive_name
@@ -247,18 +281,22 @@ pnpm run prisma:generate
 ## 🏗 Building for Production
 
 ### 1. Build All Packages and Applications
+
 ```bash
 pnpm build
 ```
 
 This command:
+
 - Compiles TypeScript
 - Bundles applications
 - Optimizes for production
 - Generates necessary artifacts
 
 ### 2. Production Environment Variables
+
 Create `.env.production`:
+
 ```env
 DATABASE_URL="postgresql://prod-user:prod-password@prod-host:5432/critiqai"
 NEXTAUTH_URL="https://yourdomain.com"
@@ -266,12 +304,15 @@ NEXTAUTH_SECRET="your-production-secret-key"
 ```
 
 ### 3. Start Production Server
+
 ```bash
 pnpm start
 ```
 
 ### 4. Deploy
+
 Deploy built artifacts to your hosting platform:
+
 - **Vercel**: Recommended for Next.js applications
 - **AWS**: EC2, ECS, or Amplify
 - **Docker**: Use provided `docker-compose.yml`
@@ -279,15 +320,15 @@ Deploy built artifacts to your hosting platform:
 
 ## 📜 Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm dev` | Start all apps in development mode |
-| `pnpm build` | Build all packages and applications |
-| `pnpm start` | Start production server |
-| `pnpm lint` | Run ESLint across monorepo |
-| `pnpm format` | Format code with Prettier |
-| `pnpm check-types` | Type-check entire monorepo |
-| `pnpm rm:modules` | Clean install (removes node_modules and lock files) |
+| Command            | Description                                         |
+| ------------------ | --------------------------------------------------- |
+| `pnpm dev`         | Start all apps in development mode                  |
+| `pnpm build`       | Build all packages and applications                 |
+| `pnpm start`       | Start production server                             |
+| `pnpm lint`        | Run ESLint across monorepo                          |
+| `pnpm format`      | Format code with Prettier                           |
+| `pnpm check-types` | Type-check entire monorepo                          |
+| `pnpm rm:modules`  | Clean install (removes node_modules and lock files) |
 
 ## 🐳 Docker Support
 
@@ -307,37 +348,48 @@ docker-compose down
 ## 🔧 Troubleshooting
 
 ### Node Version Issues
+
 Ensure you're using Node.js v18 or higher:
+
 ```bash
 node --version
 ```
 
 ### pnpm Installation Issues
+
 If pnpm is not recognized:
+
 ```bash
 npm install -g pnpm@9.0.0
 ```
 
 ### Database Connection Errors
+
 - Verify PostgreSQL is running
 - Check DATABASE_URL in `.env`
 - Ensure database user has proper permissions
 
 ### Port Already in Use
+
 If port 3000 is in use, modify the dev script:
+
 ```bash
 pnpm dev -- --port 3001
 ```
 
 ### Module Resolution Issues
+
 Clear the monorepo and reinstall:
+
 ```bash
 pnpm rm:modules
 pnpm install
 ```
 
 ### Build Failures
+
 Clear Turborepo cache and rebuild:
+
 ```bash
 rm -rf .turbo
 pnpm build

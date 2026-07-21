@@ -40,4 +40,3 @@ export function createAnalysisWorker(
 
 export type { AnalysisJobData } from './jobs.js';
 export { getConnection };
-

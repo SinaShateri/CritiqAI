@@ -27,7 +27,12 @@ const FeaturesCoreFeaturesCategory = ({
         className='justify-center'
       >
         {CATEGORIES.map((category) => (
-          <Tab key={category.key} value={category.key}>{category.label}</Tab>
+          <Tab
+            key={category.key}
+            value={category.key}
+          >
+            {category.label}
+          </Tab>
         ))}
       </Tabs>
     </section>

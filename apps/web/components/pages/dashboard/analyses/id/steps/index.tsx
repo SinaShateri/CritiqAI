@@ -7,7 +7,7 @@ const DashboardAnalysesIDSteps = ({
   steps: AnalysisData['steps'];
 }) => {
   return (
-    <div className='border-border-subtle flex h-14 flex-col justify-center border-b bg-[#0a0c10] px-6'>
+    <div className='border-border bg-background flex h-14 flex-col justify-center border-b px-6'>
       <div className='flex items-center'>
         {steps.map((step, index) => (
           <DashboardAnalysesIDStepsIndicator
