@@ -13,14 +13,14 @@ const VerifyEmailSent = async () => {
   }
 
   return (
-    <div className='bg-bg flex min-h-screen w-full flex-col items-center justify-center px-6 py-10'>
+    <div className='bg-background flex min-h-screen w-full flex-col items-center justify-center px-6 py-10'>
       <div className='flex w-full max-w-95 flex-col items-center'>
         {/* ICON */}
         <div
           className='relative'
           style={{ animation: 'verify-pop 0.4s ease-out both' }}
         >
-          <div className='flex h-16 w-16 items-center justify-center rounded-full border-[1.5px] border-[#2e3148] bg-[#1a1c2e]'>
+          <div className='border-border-strong bg-surface-raised flex h-16 w-16 items-center justify-center rounded-full border-[1.5px]'>
             <IconMail
               size={32}
               className='text-brand'
@@ -40,11 +40,11 @@ const VerifyEmailSent = async () => {
           className='mt-6 flex flex-col items-center gap-2 text-center'
           style={{ animation: 'fade-up 0.4s ease-out 0.1s both' }}
         >
-          <h1 className='text-heading text-[22px] leading-tight font-medium'>
+          <h1 className='text-foreground text-[22px] leading-tight font-medium'>
             Check your inbox
           </h1>
 
-          <p className='text-body text-[14px] leading-[1.7]'>
+          <p className='text-foreground-muted text-sm leading-[1.7]'>
             We sent a verification link to
           </p>
 
@@ -53,7 +53,7 @@ const VerifyEmailSent = async () => {
               size={16}
               className='text-brand'
             />
-            <span className='text-heading-soft text-[13px] font-medium'>
+            <span className='text-foreground font-mono text-sm font-medium'>
               {registeredEmail}
             </span>
           </div>
@@ -64,7 +64,7 @@ const VerifyEmailSent = async () => {
           className='border-border-subtle bg-surface mt-7 w-full rounded-lg border px-5 py-4.5'
           style={{ animation: 'fade-up 0.4s ease-out 0.2s both' }}
         >
-          <div className='text-muted-text mb-3.5 text-[10px] tracking-[1.5px]'>
+          <div className='text-foreground-subtle mb-3.5 text-xs font-semibold tracking-[1.5px]'>
             NEXT STEPS
           </div>
 
@@ -77,10 +77,10 @@ const VerifyEmailSent = async () => {
               key={i}
               className='mb-3 flex items-center gap-3 last:mb-0'
             >
-              <div className='text-brand flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border border-[#2e3148] bg-[#1a1c2e] text-[11px]'>
+              <div className='border-border-strong bg-surface-raised text-primary flex h-5.5 w-5.5 shrink-0 items-center justify-center rounded-full border text-xs'>
                 {i + 1}
               </div>
-              <span className='text-body text-[13px]'>{text}</span>
+              <span className='text-foreground-muted text-sm'>{text}</span>
             </div>
           ))}
         </div>
@@ -92,14 +92,14 @@ const VerifyEmailSent = async () => {
           <AuthVerifyEmailSentResendForm />
           <Link
             href={PAGES.auth.login}
-            className='text-faint hover:text-body flex items-center gap-1.5 text-[12px] transition-colors'
+            className='text-foreground-subtle hover:text-foreground focus-visible:ring-ring flex items-center gap-1.5 text-xs transition-colors focus-visible:ring-2 focus-visible:outline-none'
           >
             <IconArrowLeft size={13} />
             Back to sign in
           </Link>
         </div>
 
-        <p className='mt-4 text-center text-[11px] text-[#2e3148]'>
+        <p className='text-foreground-subtle mt-4 text-center text-xs'>
           Can&apos;t find it? Check your spam or junk folder.
         </p>
       </div>

@@ -2,6 +2,9 @@
 
 import { registerAction } from '@/lib/actions/auth.actions';
 import PAGES from '@repo/constants/pages';
+import Button from '@repo/ui/button';
+import Input from '@repo/ui/input';
+import Label from '@repo/ui/label';
 import {
   IconEye,
   IconEyeOff,
@@ -17,152 +20,95 @@ const AuthRegister = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
-
   const [state, action, isPending] = useActionState(registerAction, null);
 
-  console.log(state);
-
-  // بعد از ثبت‌نام موفق، redirect به صفحه تایید ایمیل
   useEffect(() => {
-    if (state?.success) {
-      router.push(PAGES.auth.verifyEmailSent);
-    }
+    if (state?.success) router.push(PAGES.auth.verifyEmailSent);
   }, [state, router]);
 
+  const hasError = Boolean(state && !state.success);
   return (
     <div
       id='auth-forms'
-      className='mt-6 transition-opacity duration-200'
-      style={{ animation: '0.2s ease-out 0s 1 normal both running fade-up' }}
+      className='animate-fade-up mt-6'
     >
-      {/* نمایش خطای کلی */}
-      {state && !state.success && (
-        <div className='mb-4 rounded-md border border-red-500/30 bg-red-500/10 px-4 py-3 text-[13px] text-red-400'>
+      {state && !state.success ? (
+        <div
+          role='alert'
+          className='border-error/30 bg-error-surface text-error mb-4 rounded-md border px-4 py-3 text-sm'
+        >
           {state.error}
         </div>
-      )}
-
+      ) : null}
       <form
-        className='flex flex-col gap-3.5'
+        className='flex flex-col gap-4'
         action={action}
       >
-        {/* Full name */}
-        <div>
-          <label className='text-muted-text mb-1.25 block text-[11px]'>
-            Full name
-          </label>
-          <div className='relative'>
-            <span className='text-faint pointer-events-none absolute top-1/2 left-3 -translate-y-1/2'>
-              <IconUser size={18} />
-            </span>
-            <input
-              name='name'
-              placeholder='Jane Doe'
-              disabled={isPending}
-              className='border-border-subtle bg-surface text-heading-soft placeholder:text-faint focus:border-brand w-full rounded-sm border py-2.5 pr-9 pl-9 text-[13px] transition-colors focus:outline-none disabled:opacity-50'
-            />
-          </div>
-        </div>
+        <FormField
+          id='register-name'
+          label='Full name'
+          name='name'
+          placeholder='Jane Doe'
+          icon={<IconUser size={18} />}
+          autoComplete='name'
+          disabled={isPending}
+          invalid={hasError}
+        />
+        <FormField
+          id='register-email'
+          label='Email address'
+          name='email'
+          type='email'
+          placeholder='you@company.com'
+          icon={<IconMail size={18} />}
+          autoComplete='email'
+          disabled={isPending}
+          invalid={hasError}
+        />
+        <PasswordField
+          id='register-password'
+          label='Password'
+          name='password'
+          placeholder='At least 8 characters'
+          shown={showPassword}
+          onToggle={() => setShowPassword((current) => !current)}
+          disabled={isPending}
+          invalid={hasError}
+        />
+        <PasswordField
+          id='register-confirm'
+          label='Confirm password'
+          name='confirm'
+          placeholder='Repeat password'
+          shown={showConfirm}
+          onToggle={() => setShowConfirm((current) => !current)}
+          disabled={isPending}
+          invalid={hasError}
+        />
 
-        {/* Email */}
-        <div>
-          <label className='text-muted-text mb-1.25 block text-[11px]'>
-            Email address
-          </label>
-          <div className='relative'>
-            <span className='text-faint pointer-events-none absolute top-1/2 left-3 -translate-y-1/2'>
-              <IconMail size={18} />
-            </span>
-            <input
-              name='email'
-              type='email'
-              placeholder='you@company.com'
-              disabled={isPending}
-              className='border-border-subtle bg-surface text-heading-soft placeholder:text-faint focus:border-brand w-full rounded-sm border py-2.5 pr-9 pl-9 text-[13px] transition-colors focus:outline-none disabled:opacity-50'
-            />
-          </div>
-        </div>
-
-        {/* Password */}
-        <div>
-          <label className='text-muted-text mb-1.25 block text-[11px]'>
-            Password
-          </label>
-          <div className='relative'>
-            <span className='text-faint pointer-events-none absolute top-1/2 left-3 -translate-y-1/2'>
-              <IconLock size={18} />
-            </span>
-            <input
-              name='password'
-              type={showPassword ? 'text' : 'password'}
-              placeholder='At least 8 characters'
-              disabled={isPending}
-              className='border-border-subtle bg-surface text-heading-soft placeholder:text-faint focus:border-brand w-full rounded-sm border py-2.5 pr-9 pl-9 text-[13px] transition-colors focus:outline-none disabled:opacity-50'
-            />
-            <button
-              type='button'
-              onClick={() => setShowPassword((p) => !p)}
-              className='text-faint hover:text-body absolute top-1/2 right-2.5 -translate-y-1/2'
-            >
-              {showPassword ? <IconEyeOff size={18} /> : <IconEye size={18} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Confirm password */}
-        <div>
-          <label className='text-muted-text mb-1.25 block text-[11px]'>
-            Confirm password
-          </label>
-          <div className='relative'>
-            <span className='text-faint pointer-events-none absolute top-1/2 left-3 -translate-y-1/2'>
-              <IconLock size={18} />
-            </span>
-            <input
-              name='confirm'
-              type={showConfirm ? 'text' : 'password'}
-              placeholder='Repeat password'
-              disabled={isPending}
-              className='border-border-subtle bg-surface text-heading-soft placeholder:text-faint focus:border-brand w-full rounded-sm border py-2.5 pr-9 pl-9 text-[13px] transition-colors focus:outline-none disabled:opacity-50'
-            />
-            <button
-              type='button'
-              onClick={() => setShowConfirm((p) => !p)}
-              className='text-faint hover:text-body absolute top-1/2 right-2.5 -translate-y-1/2'
-            >
-              {showConfirm ? <IconEyeOff size={18} /> : <IconEye size={18} />}
-            </button>
-          </div>
-        </div>
-
-        {/* Terms */}
-        <label className='text-muted-text flex items-start gap-2 text-[12px]'>
+        <label className='text-foreground-muted flex items-start gap-2 text-xs'>
           <input
-            className='accent-brand mt-0.5'
+            className='accent-primary mt-0.5 h-4 w-4'
             type='checkbox'
             name='terms'
+            required
           />
-          <span>
-            I agree to the <a className='text-brand'>Terms of Service</a> and{' '}
-            <a className='text-brand'>Privacy Policy</a>
-          </span>
+          <span>I agree to the Terms of Service and Privacy Policy.</span>
         </label>
-
-        {/* Submit */}
-        <button
+        <Button
           type='submit'
+          loading={isPending}
           disabled={isPending}
-          className='bg-brand hover:bg-brand-hover mt-2 w-full rounded-md py-3 text-[14px] font-medium text-white transition-colors active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60'
+          className='mt-2'
         >
-          {isPending ? 'Creating account...' : 'Create account →'}
-        </button>
+          Create account
+        </Button>
       </form>
-
-      <p className='text-faint mt-4 text-center text-[12px]'>
+      <p className='text-foreground-subtle mt-4 text-center text-xs'>
         Already have an account?{' '}
         <Link
           href={PAGES.auth.login}
-          className='text-brand'
+          className='text-primary'
         >
           Sign in
         </Link>
@@ -170,5 +116,103 @@ const AuthRegister = () => {
     </div>
   );
 };
+
+type FormFieldProps = {
+  id: string;
+  label: string;
+  name: string;
+  placeholder: string;
+  icon: React.ReactNode;
+  type?: string;
+  autoComplete: string;
+  disabled: boolean;
+  invalid: boolean;
+};
+const FormField = ({ id, label, icon, invalid, ...props }: FormFieldProps) => (
+  <div>
+    <Label
+      htmlFor={id}
+      className='mb-1.5 block'
+    >
+      {label}
+    </Label>
+    <div className='relative'>
+      <span
+        aria-hidden='true'
+        className='text-foreground-subtle pointer-events-none absolute top-1/2 left-3 -translate-y-1/2'
+      >
+        {icon}
+      </span>
+      <Input
+        id={id}
+        required
+        aria-invalid={invalid}
+        className='rounded-md py-2.5 pr-9 pl-9 text-sm'
+        invalid={invalid}
+        {...props}
+      />
+    </div>
+  </div>
+);
+
+type PasswordFieldProps = {
+  id: string;
+  label: string;
+  name: string;
+  placeholder: string;
+  shown: boolean;
+  onToggle: () => void;
+  disabled: boolean;
+  invalid: boolean;
+};
+const PasswordField = ({
+  id,
+  label,
+  name,
+  placeholder,
+  shown,
+  onToggle,
+  disabled,
+  invalid,
+}: PasswordFieldProps) => (
+  <div>
+    <Label
+      htmlFor={id}
+      className='mb-1.5 block'
+    >
+      {label}
+    </Label>
+    <div className='relative'>
+      <IconLock
+        aria-hidden='true'
+        size={18}
+        className='text-foreground-subtle pointer-events-none absolute top-1/2 left-3 -translate-y-1/2'
+      />
+      <Input
+        id={id}
+        name={name}
+        type={shown ? 'text' : 'password'}
+        autoComplete='new-password'
+        required
+        placeholder={placeholder}
+        disabled={disabled}
+        aria-invalid={invalid}
+        invalid={invalid}
+        className='rounded-md py-2.5 pr-10 pl-9 text-sm'
+      />
+      <button
+        type='button'
+        onClick={onToggle}
+        aria-label={
+          shown ? `Hide ${label.toLowerCase()}` : `Show ${label.toLowerCase()}`
+        }
+        aria-pressed={shown}
+        className='text-foreground-subtle hover:text-foreground focus-visible:ring-ring absolute top-1/2 right-2.5 -translate-y-1/2 rounded p-1 focus-visible:ring-2 focus-visible:outline-none'
+      >
+        {shown ? <IconEyeOff size={18} /> : <IconEye size={18} />}
+      </button>
+    </div>
+  </div>
+);
 
 export default AuthRegister;
