@@ -7,6 +7,7 @@ type TabsProps = {
   onValueChange: (value: string) => void;
   className?: string;
   label?: string;
+  panelId?: string;
 };
 
 type TabProps = {
@@ -15,7 +16,7 @@ type TabProps = {
   className?: string;
 };
 
-const Tabs = ({ children, value, onValueChange, className, label = 'Tabs' }: TabsProps) => {
+const Tabs = ({ children, value, onValueChange, className, label = 'Tabs', panelId }: TabsProps) => {
   const id = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
@@ -66,7 +67,7 @@ const Tabs = ({ children, value, onValueChange, className, label = 'Tabs' }: Tab
             role='tab'
             id={tabId}
             aria-selected={selected}
-            aria-controls={`${id}-panel`}
+            aria-controls={panelId}
             tabIndex={selected ? 0 : -1}
             className={cn(
               'rounded-full border border-border px-3 py-2 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',

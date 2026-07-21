@@ -1,5 +1,6 @@
 import HomeFeatureCard from './card';
 import { homeFeatures } from './utils';
+import SectionHeader from '@repo/ui/section-header';
 
 const HomeFeatures = () => {
   return (
@@ -8,13 +9,7 @@ const HomeFeatures = () => {
       className='px-6 py-14'
     >
       <div className='mx-auto max-w-225'>
-        <div className='mb-2 text-[11px] tracking-[1.5px] text-brand'>
-          FEATURES
-        </div>
-
-        <h2 className='text-[26px] font-medium text-heading-soft'>
-          Everything your site needs to be critiqued
-        </h2>
+        <SectionHeader eyebrow='Features' title='Everything your site needs to be critiqued' titleClassName='text-2xl font-medium' />
 
         <div className='mt-7 grid grid-cols-1 gap-3 md:grid-cols-2'>
           {homeFeatures.map((feature) => (

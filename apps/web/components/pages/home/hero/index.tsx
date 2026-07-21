@@ -1,11 +1,13 @@
 import Button from '@repo/ui/button';
+import Input from '@repo/ui/input';
+import Label from '@repo/ui/label';
 import { IconArrowRight, IconWorld } from '@tabler/icons-react';
 
 const HomeHero = () => {
   return (
     <section className='border-border-subtle border-b px-6 pt-20 pb-16 text-center'>
       <div className='mx-auto max-w-3xl'>
-        <div className='animate-fade-up inline-flex items-center gap-2 rounded-[20px] border border-[#2a2d38] bg-[#1a1c24] px-3.5 py-1'>
+        <div className='animate-fade-up inline-flex items-center gap-2 rounded-full border border-border bg-surface-raised px-3.5 py-1'>
           <span className='bg-brand h-1.5 w-1.5 rounded-full'></span>
           <span className='text-brand text-[12px]'>
             AI-Powered Website Analysis
@@ -22,23 +24,28 @@ const HomeHero = () => {
           We find them in seconds.
         </h1>
         <p
-          className='text-body animate-fade-up mt-4 text-[16px]'
+          className='animate-fade-up mt-4 text-base text-foreground-muted'
           style={{ animationDelay: '0.15s' }}
         >
           Paste any URL. Get a full live report on performance, SEO,
           accessibility &amp; AI redesign suggestions.
         </p>
         <form
-          className='bg-surface border-border-strong animate-fade-up mx-auto mt-8 flex max-w-130 rounded-lg border'
+          className='animate-fade-up mx-auto mt-8 flex max-w-130 rounded-lg border border-border-strong bg-surface'
           style={{ animationDelay: '0.2s' }}
         >
           <div className='border-border-subtle flex items-center border-r px-3.5'>
-            <IconWorld className='text-faint' />
+            <IconWorld aria-hidden='true' className='text-foreground-subtle' />
           </div>
-          <input
+          <Label htmlFor='website-url' className='sr-only'>
+            Website URL to analyze
+          </Label>
+          <Input
+            id='website-url'
+            name='website-url'
             type='url'
             placeholder='https://yourwebsite.com'
-            className='placeholder:text-muted-text flex-1 border-none bg-transparent px-3.5 py-3 text-[14px] text-[#8c8fa0] outline-none'
+            className='h-auto flex-1 rounded-none border-0 bg-transparent px-3.5 py-3 text-base shadow-none focus-visible:ring-0'
           />
           <Button
             type='submit'
@@ -48,7 +55,7 @@ const HomeHero = () => {
             Analyze
           </Button>
         </form>
-        <p className='text-faint mt-4 text-[12px]'>
+        <p className='mt-4 text-xs text-foreground-subtle'>
           No signup required · Results in ~30 seconds
         </p>
       </div>

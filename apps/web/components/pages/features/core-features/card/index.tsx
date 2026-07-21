@@ -1,3 +1,4 @@
+import Badge from '@repo/ui/badge';
 import { CategoryKey } from '../category/tab';
 
 export interface Feature {
@@ -14,19 +15,17 @@ export interface Feature {
 
 const FeaturesCoreFeaturesCard = ({ feature }: { feature: Feature }) => {
   return (
-    <div className='border-border-subtle bg-surface rounded-lg border p-5 transition-colors hover:border-[#2e3148]'>
-      <div className='mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-[#1a1c2e]'>
+    <div className='rounded-lg border border-border bg-surface p-5 transition-colors hover:border-border-strong'>
+      <div className='mb-3 flex h-8 w-8 items-center justify-center rounded-lg bg-surface-raised'>
         {feature.icon}
       </div>
-      <h3 className='text-heading-soft text-[14px] font-medium'>
+      <h3 className='text-sm font-medium text-foreground'>
         {feature.title}
       </h3>
-      <p className='mt-1.25 text-[13px] leading-[1.65] text-[#4a4f62]'>
+      <p className='mt-1.25 text-sm leading-[1.65] text-foreground-muted'>
         {feature.description}
       </p>
-      <span className='text-brand mt-2.5 inline-block rounded-lg bg-[#1a1c2e] px-2 py-0.5 text-[10px]'>
-        {feature.badgeLabel}
-      </span>
+      <div className='mt-2.5'><Badge variant='primary'>{feature.badgeLabel}</Badge></div>
     </div>
   );
 };

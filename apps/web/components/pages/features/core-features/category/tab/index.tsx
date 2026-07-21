@@ -19,7 +19,7 @@ const FeaturesCoreFeaturesCategoryTab = ({
     className={
       active
         ? 'border-brand bg-brand rounded-xl border px-4 py-1.25 text-[12px] text-white transition-colors'
-        : 'border-border-subtle hover:text-body rounded-xl border px-4 py-1.25 text-[12px] text-[#4a4f62] transition-colors'
+        : 'rounded-xl border border-border px-4 py-1.25 text-xs text-foreground-muted transition-colors hover:text-foreground'
     }
   >
     {category.label}

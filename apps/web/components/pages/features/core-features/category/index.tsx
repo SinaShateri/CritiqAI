@@ -1,5 +1,6 @@
 import { Dispatch, SetStateAction } from 'react';
-import FeaturesCoreFeaturesCategoryTab, { Category, CategoryKey } from './tab';
+import { Tab, Tabs } from '@repo/ui/tabs';
+import { Category, CategoryKey } from './tab';
 
 const CATEGORIES: Category[] = [
   { key: 'all', label: 'All' },
@@ -18,16 +19,17 @@ const FeaturesCoreFeaturesCategory = ({
 }) => {
   return (
     <section className='border-border-subtle border-b px-6 py-5'>
-      <div className='flex flex-wrap items-center justify-center gap-2'>
+      <Tabs
+        value={activeCategory}
+        onValueChange={(value) => setActiveCategory(value as CategoryKey)}
+        label='Feature categories'
+        panelId='feature-results'
+        className='justify-center'
+      >
         {CATEGORIES.map((category) => (
-          <FeaturesCoreFeaturesCategoryTab
-            key={category.key}
-            category={category}
-            active={activeCategory === category.key}
-            onSelect={setActiveCategory}
-          />
+          <Tab key={category.key} value={category.key}>{category.label}</Tab>
         ))}
-      </div>
+      </Tabs>
     </section>
   );
 };

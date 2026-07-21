@@ -6,12 +6,12 @@ import HomeLivepreview from './live-preview';
 
 export default function Home() {
   return (
-    <main>
+    <>
       <HomeHero />
       <HomeAnalytics />
       <HomeFeatures />
       <HomeLivepreview />
       <HomeCTA />
-    </main>
+    </>
   );
 }
