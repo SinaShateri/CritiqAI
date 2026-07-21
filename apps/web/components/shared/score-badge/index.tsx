@@ -1,4 +1,4 @@
-import cn from '@repo/utils/cn';
+import Badge from '@repo/ui/badge';
 
 type ScoreBadgeProps = {
   label: string;
@@ -6,23 +6,14 @@ type ScoreBadgeProps = {
   status: 'success' | 'warn' | 'error';
 };
 
-const colorMap = {
-  success: 'text-success bg-[#0e2218]',
-  warn: 'text-warn bg-[#221a0c]',
-  error: 'text-error bg-[#2e0c0c]',
+const variantMap = {
+  success: 'success' as const,
+  warn: 'warn' as const,
+  error: 'error' as const,
 };
 
 const ScoreBadge = ({ label, value, status }: ScoreBadgeProps) => {
-  return (
-    <span
-      className={cn(
-        'rounded-xl px-2 py-0.5 text-[11px] font-medium',
-        colorMap[status],
-      )}
-    >
-      {label} {value}
-    </span>
-  );
+  return <Badge variant={variantMap[status]}>{`${label} ${value}`}</Badge>;
 };
 
 export default ScoreBadge;
